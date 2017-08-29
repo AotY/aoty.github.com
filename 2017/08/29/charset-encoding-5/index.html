@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vx1wt6vj30xk0bgq3m.jpg">
 <meta property="og:image" content="http://i.imgur.com/ttdQkQh.png">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fj0wgt7hrnj30bg0hgaas.jpg">
-<meta property="og:updated_time" content="2017-08-29T13:26:08.000Z">
+<meta property="og:updated_time" content="2017-08-29T13:27:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python3 编码">
 <meta name="twitter:description" content="由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习的记录了。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新 Python3 编码  The rules for translating a Unicode">
@@ -262,7 +262,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">duigou.encode(<span class="string">'utf-8'</span>) <span class="comment"># 编码 或者 bytes(s, encoding='utf-8')</span></div><div class="line">Out[<span class="number">20</span>]: <span class="string">b'\xe2\x9c\x93'</span> <span class="comment"># 输出，注意utf-8是变长编码</span></div><div class="line"></div><div class="line">type(<span class="string">b'\xe2\x9c\x93'</span>) <span class="comment">#查看type</span></div><div class="line">Out[<span class="number">30</span>]: bytes</div></pre></td></tr></table></figure>
 <p>可以看出✓字符使用utf-8编码后是三个字节，如果使用GBK进行编码呢？</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">duigou.encode(&apos;gbk&apos;)</div><div class="line">---------------------------------------------------------------------------</div><div class="line">UnicodeEncodeError                        Traceback (most recent call last)</div><div class="line">&lt;ipython-input-27-3cbb798ed584&gt; in &lt;module&gt;()</div><div class="line">----&gt; 1 duigou.encode(&apos;gbk&apos;)</div><div class="line"></div><div class="line">UnicodeEncodeError: &apos;gbk&apos; codec can&apos;t encode character &apos;\u2713&apos; in position 0: illegal multibyte sequence</div></pre></td></tr></table></figure>
-<p>我x，怎么出错了？ 不会啊，思路没有错了，将Unicode的字符编码为字节呢。 其实，不出错才不正常呢，因为GBK字符集中没有这个字符。</p>
+<p>我x，怎么出错了？ 不会啊，思路没有错啊，将Unicode的字符编码为字节呢。 其实，不出错才不正常呢，因为GBK字符集中没有这个字符。</p>
 <p>如果我们知道了一个字符的Unicode编号，怎么将它变为字符呢？好问题。</p>
 <p>比如有一个<a href="https://unicode-table.com/cn/2764/" target="_blank" rel="external">粗实心心</a>。它的编号（码位）是10084，我们使用下面代码将它变为一个字符（注意：GBK中没有这个字符）。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fj0wgt7hrnj30bg0hgaas.jpg" alt="WX20170829-210900@2x"></p>
@@ -452,5 +452,20 @@
   }
 </script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
