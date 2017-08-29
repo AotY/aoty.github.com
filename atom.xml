@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://aoty.github.io/"/>
-  <updated>2017-08-29T13:23:30.000Z</updated>
+  <updated>2017-08-29T13:26:08.000Z</updated>
   <id>http://aoty.github.io/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <link href="http://aoty.github.io/2017/08/29/charset-encoding-5/"/>
     <id>http://aoty.github.io/2017/08/29/charset-encoding-5/</id>
     <published>2017-08-29T11:00:41.000Z</published>
-    <updated>2017-08-29T13:23:30.000Z</updated>
+    <updated>2017-08-29T13:26:08.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
-<p>由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。</p>
+<p>由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习的记录了。</p>
 </blockquote>
 <p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
 <p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
@@ -113,9 +113,9 @@
     <summary type="html">
     
       &lt;blockquote&gt;
-&lt;p&gt;由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。&lt;/p&gt;
+&lt;p&gt;由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习的记录了。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;/2017/08/28/charset-encoding-1/&quot;&gt;编码？你需要知道的那些
+&lt;p&gt;&lt;a href=&quot;/2017/08/28/charset-encoding-1/&quot;&gt;编码？你需要知道的那些事
     
     </summary>
     
