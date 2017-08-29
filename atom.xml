@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>AotY&#39;s Blog</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://aoty.github.io/"/>
+  <updated>2017-08-29T13:23:30.000Z</updated>
+  <id>http://aoty.github.io/</id>
+  
+  <author>
+    <name>AotY</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python3 编码</title>
+    <link href="http://aoty.github.io/2017/08/29/charset-encoding-5/"/>
+    <id>http://aoty.github.io/2017/08/29/charset-encoding-5/</id>
+    <published>2017-08-29T11:00:41.000Z</published>
+    <updated>2017-08-29T13:23:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">Python3 编码</a></p>
+<blockquote>
+<p>The rules for translating a Unicode string into a sequence of bytes are called an <strong>encoding</strong>.<br>Unicode字符串转换成字节序列的规则被称为编码。</p>
+</blockquote>
+<p>之前的<a href="/2017/08/29/charset-encoding-3/">文章</a>里面提到过，Python2.x默认的编码是ascii（因为当初Python诞生的时候，还没有Unicode，具体的看之前<a href="/2017/08/29/charset-encoding-3/">文章</a>），这也是为什么我们讨论在Python2.x中出现乱码的情况。</p>
+<h2 id="1-默认编码变化"><a href="#1-默认编码变化" class="headerlink" title="1. 默认编码变化"></a>1. 默认编码变化</h2><p>在Python3中，默认编码变为了utf-8，我们可以进行验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import sys</div><div class="line">sys.getdefaultencoding()</div><div class="line">Out[2]: &apos;utf-8&apos;</div></pre></td></tr></table></figure>
+<p>这样我们在使用print函数、读取文件、保存文件时，Python3默认都会使用utf-8进行编码。</p>
+<p>下面做一个测试。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fj0vcd2olwj319u0gogpi.jpg" alt="Screen Shot 2017-08-29 at 20.30.59"><br>这是一个使用GB 18030（也是一类GBK编码标准，主要是增加了汉字数量）编码保存的文件，我们在Python中使用默认方式打开会出现什么结果呢？</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vhswc1jj317k0saafq.jpg" alt="WX20170829-203515@2x"></p>
+<p>都不让打开，直接报错，肯定的毕竟UTF-8和GBK不兼容。正确方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">f = open(&apos;gbk.txt&apos;, &apos;r&apos;, encoding=&apos;gbk&apos;)</div><div class="line">f.read()</div><div class="line">Out[59]: &apos;这个测试文件&apos;</div></pre></td></tr></table></figure>
+<p>看来，是和GBK说再见的时候了（尽量少用），如果都使用默认编码的话一般不会再出现乱码问题了。</p>
+<p>下面介绍utf-8编码的规则和好处。</p>
+<ol>
+<li><p>utf-8进行编码的规则：</p>
+<ul>
+<li>如果Unicode码位（编号）&lt; 128，则由相应的字节值表示。</li>
+<li>如果Unicode码位（编号）&gt; = 128，将它变成两个，三个或四个字节的序列，其中序列的每个字节都在128到255之间。</li>
+</ul>
+</li>
+<li><p>使用utf-8进行编码的好处（半翻译）：</p>
+<ul>
+<li><p>它可以处理任意Unicode码位（编号）。</p>
+</li>
+<li><p>将一个Unicode字符串变成一个不包含嵌入零字节的字节序列。</p>
+</li>
+<li><p>一串ASCII文本也是有效的UTF-8文本（具有兼容性）。</p>
+</li>
+<li><p>UTF-8相当紧凑，大多数常用字符可以用一个或两个字节表示（节省内存）。</p>
+</li>
+<li><p>如果字节损坏或丢失，可以确定下一个UTF-8编码代码点的开始并重新同步。</p>
+<p>​</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-str与bytes"><a href="#2-str与bytes" class="headerlink" title="2. str与bytes"></a>2. str与bytes</h2><p>Python2.x中，字符串有两种表现类型：一个是Unicode（表示文本字符串）、一个是str（表示字节序列）。</p>
+<p>在Python3.x中，使用str表示字符串，bytes表示字节序列。官方文档是这样介绍的：</p>
+<ul>
+<li><p>str （字符）</p>
+<p>Strings are immutable sequences of Unicode code points. </p>
+<p>str是一串不可变的Unicode码位（编码）序列。</p>
+</li>
+<li><p>bytes（字节）</p>
+<p>bytes is an immutable sequence of integers in the range <code>0 &lt;= x &lt; 256</code>.</p>
+<p>bytes是一串不可变的整数（0 &lt;= x &lt; 256）序列。</p>
+</li>
+</ul>
+<p>下面这张图可以一定程度上说明区别。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vx1wt6vj30xk0bgq3m.jpg" alt="WX20170829-205039@2x"></p>
+<p>现在我们定义一个str字符，它默认就是一个Unicode的字符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">duigou = &apos;✓&apos; # 定义字符</div><div class="line">ord(duigou) # 获取字符在Unicode中的码位</div><div class="line">Out[18]: 10003 # 码位</div></pre></td></tr></table></figure>
+<p>上面输出的<strong>10003</strong>（十六进制表示为0x2713）正是<a href="https://unicode-table.com/cn/2713/" target="_blank" rel="external">对钩字符</a>在Unicode中的编号（码位）。</p>
+<p><img src="http://i.imgur.com/ttdQkQh.png" alt=""></p>
+<p>现在我们使用utf-8编码将字符编码为字节：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">duigou.encode(<span class="string">'utf-8'</span>) <span class="comment"># 编码 或者 bytes(s, encoding='utf-8')</span></div><div class="line">Out[<span class="number">20</span>]: <span class="string">b'\xe2\x9c\x93'</span> <span class="comment"># 输出，注意utf-8是变长编码</span></div><div class="line"></div><div class="line">type(<span class="string">b'\xe2\x9c\x93'</span>) <span class="comment">#查看type</span></div><div class="line">Out[<span class="number">30</span>]: bytes</div></pre></td></tr></table></figure>
+<p>可以看出✓字符使用utf-8编码后是三个字节，如果使用GBK进行编码呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">duigou.encode(&apos;gbk&apos;)</div><div class="line">---------------------------------------------------------------------------</div><div class="line">UnicodeEncodeError                        Traceback (most recent call last)</div><div class="line">&lt;ipython-input-27-3cbb798ed584&gt; in &lt;module&gt;()</div><div class="line">----&gt; 1 duigou.encode(&apos;gbk&apos;)</div><div class="line"></div><div class="line">UnicodeEncodeError: &apos;gbk&apos; codec can&apos;t encode character &apos;\u2713&apos; in position 0: illegal multibyte sequence</div></pre></td></tr></table></figure>
+<p>我x，怎么出错了？ 不会啊，思路没有错了，将Unicode的字符编码为字节呢。 其实，不出错才不正常呢，因为GBK字符集中没有这个字符。</p>
+<p>如果我们知道了一个字符的Unicode编号，怎么将它变为字符呢？好问题。</p>
+<p>比如有一个<a href="https://unicode-table.com/cn/2764/" target="_blank" rel="external">粗实心心</a>。它的编号（码位）是10084，我们使用下面代码将它变为一个字符（注意：GBK中没有这个字符）。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fj0wgt7hrnj30bg0hgaas.jpg" alt="WX20170829-210900@2x"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cushixinxin = 10084 #Unicode编号</div><div class="line">chr(cushixinxin) #chr函数</div><div class="line">Out[29]: &apos;❤&apos; #输出，粗实心心</div></pre></td></tr></table></figure>
+<p>下面是上面使用到的两个函数的原型：</p>
+<ul>
+<li><p>ord(<em>c</em>)</p>
+<p>Given a string representing one Unicode character, return an integer representing the Unicode code point of that character.</p>
+</li>
+</ul>
+<ul>
+<li><p><code>chr</code>(<em>i</em>)</p>
+<p>Return the string representing a character whose Unicode code point is the integer <em>i</em>.</p>
+</li>
+</ul>
+<h2 id="3-参考资料"><a href="#3-参考资料" class="headerlink" title="3. 参考资料"></a>3. 参考资料</h2><p><a href="https://www.zhihu.com/question/19698598" target="_blank" rel="external">Python3变化</a></p>
+<p><a href="https://docs.python.org/3/howto/unicode.html#" target="_blank" rel="external">Unicode HOWTO</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;/2017/08/28/charset-encoding-1/&quot;&gt;编码？你需要知道的那些
+    
+    </summary>
+    
+    
+      <category term="编码 字符集 Python" scheme="http://aoty.github.io/tags/%E7%BC%96%E7%A0%81-%E5%AD%97%E7%AC%A6%E9%9B%86-Python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>编码？你需要知道的那些事：4-Java为什么有乱码</title>
+    <link href="http://aoty.github.io/2017/08/29/charset-encoding-4/"/>
+    <id>http://aoty.github.io/2017/08/29/charset-encoding-4/</id>
+    <published>2017-08-29T07:05:50.000Z</published>
+    <updated>2017-08-29T11:05:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>这是之前写的文章，因为博客地址换了，重新发布下。</p>
+<p>这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新：</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">关于Python3 的编码</a></p>
+<blockquote>
+<p><strong>声明： Unicode是指字符集，不是编码</strong></p>
+</blockquote>
+<p>在正式进入前， 我们用Java来查看系统文件默认编码和调用System.out.Print方法时的编码（我的是中文版的Windows）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//查看默认文件编码</div><div class="line">String encoding=System.getProperty(&quot;file.encoding&quot;);</div><div class="line">System.out.println(encoding);</div><div class="line">//输出： GBK</div><div class="line"></div><div class="line">//查看默认System.out编码</div><div class="line">OutputStreamWriter osw = new OutputStreamWriter(System.out);</div><div class="line">System.out.println(osw.getEncoding());</div><div class="line">//输出： GBK</div></pre></td></tr></table></figure>
+<p><strong>现在还我清白了吧，中文Windows的默认编码确实是GBK，不过Java中System.out默认的编码也是GBK，而Python是UTF-8</strong> ， 下面我们可以开始例子（栗子）了。（先记住，是GBK哦）</p>
+<h2 id="1-字符在Java中-JVM-到底是咋样的？"><a href="#1-字符在Java中-JVM-到底是咋样的？" class="headerlink" title="1. 字符在Java中(JVM)到底是咋样的？"></a>1. 字符在Java中(JVM)到底是咋样的？</h2><p>我们从<a href="/2017/08/29/charset-encoding-3/">上文</a>知道，Python2.x进行字符的操作时，最好将他们全部解码为Unicode后再进行操作。 无独有偶，Java（JVM）中进行字符的操作是也是先将其转换为Unicode，然后进行操作的。我们先来看张图（这是一张对号符号，很酷是不是，我们可以看到它在Unicode中的编号，你也可以在<a href="http://unicode-table.com/cn/#control-character" target="_blank" rel="external">这里</a>查找）。</p>
+<p><img src="http://i.imgur.com/5dy05bl.png" alt=""></p>
+<p>我们先来测试下这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div><div class="line">System.out.format(&quot;%X&quot;, Integer.valueOf(infinite));</div><div class="line">//输出(正是编号) ： 221E</div></pre></td></tr></table></figure>
+<p>我们再这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">char infinite = 0x221E;</div><div class="line">System.out.println(infinite);</div><div class="line">//输出(正是我们想要的字符) ： ∞</div></pre></td></tr></table></figure>
+<p><strong>完全正常， Java在内存中操作字符时，会将其转为Unicode ， 输出时再用GBK编码。</strong></p>
+<p>我们再来看张图（这是一张对号符号，我们可以看到它在Unicode中的编号，你也可以在<a href="http://unicode-table.com/cn/#control-character" target="_blank" rel="external">这里</a>查找）。我们这里用它的编号来输出这个字符，看看是不是也和上面一样顺利。</p>
+<p><img src="http://i.imgur.com/ttdQkQh.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">char duihao = 0x2713;</div><div class="line">System.out.println(duihao);</div><div class="line">//输出(这下不是啦) ： ?</div></pre></td></tr></table></figure>
+<p><strong>shit, 太不给面子了吧。上面好好的，怎么就你特殊。放轻松，还记得我们上面说Java调用System.out.println时采用的是GBK编码吗！ 其实GBK字符集中没有这个符号，哈哈！ 所以它不能正确输出。</strong>，现在我们把项目的编码改为UTF-8,再试试（针对Eclipse: 选中项目-&gt;右键-&gt;选中属性-&gt;选择UTF-8编码）。</p>
+<p>我们再次查看默认的输出编码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//查看默认文件编码</div><div class="line">String encoding=System.getProperty(&quot;file.encoding&quot;);</div><div class="line">System.out.println(encoding);</div><div class="line">//输出： UTF8</div><div class="line"></div><div class="line">//查看默认System.out编码</div><div class="line">OutputStreamWriter osw = new OutputStreamWriter(System.out);</div><div class="line">System.out.println(osw.getEncoding());</div><div class="line">//输出： UTF8</div></pre></td></tr></table></figure>
+<p>好了（确认是UTF-8），现在我们继续刚刚失败的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">char duihao = 0x2713;</div><div class="line">System.out.println(duihao);</div><div class="line">//输出(哈哈，对了吧！) ： ✓</div></pre></td></tr></table></figure>
+<p><strong>现在我们终于明白了，原来和Python一样，字符在Java中(JVM)处理的时候，也变成了Unicode中的编号。JVM的这种约定使得一个字符存在的世界分为了两部分：JVM内部和OS的文件系统。在JVM内部，统一使用Unicode表示，当这个字符被从JVM内部移到外部（即保存为文件系统中的一个文件的内容时），就进行了编码转换（我们这里开始是Java默认的GBK，后来我们改为了UTF-8）。</strong></p>
+<h2 id="2-从Java（内存）到文件里"><a href="#2-从Java（内存）到文件里" class="headerlink" title="2. 从Java（内存）到文件里"></a>2. 从Java（内存）到文件里</h2><p>当你想要把字符保存到文件中去的时候，我们要对字符进行编码。如果默认的话就是使用GBK, 但是我们可以选择为UTF-8（方法如上，改项目属性） 。</p>
+<p>好了，现在我们将我们酷酷的符号保存到文件中去。（我们只演示第一个符号。注意：第一个符号用GBK或者UTF-8编码都行， 第二个用UTF-8吧。）</p>
+<p>我们要保存的字符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div></pre></td></tr></table></figure>
+<ol>
+<li><p>使用默认为GBK的编码保存（正常显示，文件为GBK编码）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PrintWriter out=new PrintWriter(new OutputStreamWriter(new FileOutputStream(&quot;I:/GBk.txt&quot;)));</div><div class="line">out.write(infinite);</div><div class="line">out.close();</div></pre></td></tr></table></figure>
+</li>
+<li><p>修改默认编码为UTF-8 （正常显示，文件为UTF-8编码）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div><div class="line">PrintWriter out=new PrintWriter(new OutputStreamWriter(new FileOutputStream(&quot;I:/UTF-8.txt&quot;)));</div><div class="line">out.write(infinite);</div><div class="line">out.close();</div></pre></td></tr></table></figure>
+</li>
+<li><p>默认编码为GBK，但是我们使用UTF-8保存（正常显示，文件为UTF-8编码）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div><div class="line">PrintWriter out=new PrintWriter(new OutputStreamWriter(new FileOutputStream(&quot;I:/UTF-8.txt&quot;),&quot;UTF-8&quot;));</div><div class="line">out.write(infinite);</div><div class="line">out.close();</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>上面使用的类OutputStreamWriter，就是可以指定编码的地方。（这里对Unicode值进行了编码， 用Java的话说就是字节流向字符流转换。）</p>
+<p>从文件中读取数据也是一样的， 采用对应的编码去读取， 别人家是UTF-8，你用GBK（默认的）或者ASCII上，那可不就是乱套了吗！</p>
+<h2 id="3-One-more-thing"><a href="#3-One-more-thing" class="headerlink" title="3. One more thing"></a>3. One more thing</h2><p>现在我们知道了，Java也是为了统一操作字符，现将其转换为为Unicode。 所以，在JVM中，字符是以Unicode中的编号值存在的。 当我们想要保存字符时，首先要将其进行编码（按正确的方式喔, 不然有些不能正常显示，像我们上面的例子一样），然后我们就可以写入文件中去了。（<strong>还要注意的就是，默认的编码方式，它给我们带来方便，有时可带来了不便</strong>。）</p>
+<h2 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4. 参考资料"></a>4. 参考资料</h2><p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/25/248213.html" target="_blank" rel="external">Java中的字符集编码入门（五）Java代码中的字符编码转换Part 1</a><br><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248056.html" target="_blank" rel="external">Java中的字符集编码入门（三）GB2312，GBK与中文网页</a><br><a href="http://stackoverflow.com/questions/11339955/python-string-encode-decode" target="_blank" rel="external">how-to-get-console-charset</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这是之前写的文章，因为博客地址换了，重新发布下。&lt;/p&gt;
+&lt;p&gt;这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;/2017/08/28/charset-en
+    
+    </summary>
+    
+    
+      <category term="编码 字符集 Java" scheme="http://aoty.github.io/tags/%E7%BC%96%E7%A0%81-%E5%AD%97%E7%AC%A6%E9%9B%86-Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>编码？你需要知道的那些事：3-Python2.x为什么有乱码</title>
+    <link href="http://aoty.github.io/2017/08/29/charset-encoding-3/"/>
+    <id>http://aoty.github.io/2017/08/29/charset-encoding-3/</id>
+    <published>2017-08-29T07:05:47.000Z</published>
+    <updated>2017-08-29T11:05:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>这是之前写的文章，因为博客地址换了，重新发布下。</p>
+<p>这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新：</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">关于Python3 的编码</a></p>
+<blockquote>
+<p><strong>声明： Unicode是指字符集，不是编码</strong></p>
+</blockquote>
+<p>之前两篇文章，我们说到了字符集和编码，如果你还不知道字符集和编码的区别，可以先去看看前两篇文章或者Wiki下。</p>
+<p>接下来的两篇文章我们准备讨论了Python下和Java下的乱码问题，本文我们先讨论Python平台(注意，以下提到的Python均为2.X版本)，如果你只准备看Java的，那我加油写。哈哈！</p>
+<p>让我们回到问题上来，为什么会有乱码呢？ 不知道你发现没有，通常乱码都是出现了我们要进行I/O转换时（比如，从硬盘到内存）。下面我们就来讨论下这几个容易出现乱码的地方。</p>
+<h2 id="1-从硬盘到内存"><a href="#1-从硬盘到内存" class="headerlink" title="1. 从硬盘到内存"></a>1. 从硬盘到内存</h2><h3 id="读取一般文件（相对Python源代码文件来说的）"><a href="#读取一般文件（相对Python源代码文件来说的）" class="headerlink" title="读取一般文件（相对Python源代码文件来说的）"></a>读取一般文件（相对Python源代码文件来说的）</h3><p>首先，我们看看系统默认的文件编码（<strong>声明使用的是Python2.x版本，3.x默认是’utf-8’</strong>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#打开iPython，输入命令</div><div class="line">In [1]: import sys</div><div class="line">In [2]: sys.getdefaultencoding()</div><div class="line">Out[2]: &apos;ascii&apos;</div></pre></td></tr></table></figure>
+<p>太可怕了，上次不是说Windows中文的默认编码是GBK嘛，骗人，骗人！先别急，我们慢慢说。我们从记事本说起。打开记事本，输入’A’,然后保存。</p>
+<p><img src="http://i.imgur.com/tGlM482.png" alt=""></p>
+<p>对，它现在使用ASCII编码(看起来是)，保存的。在Python下读取也没有问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [3]: f = open(&apos;Demo.txt&apos;)</div><div class="line">In [4]: s = f.read()</div><div class="line">In [5]: print s</div><div class="line">A </div><div class="line">#正常显示</div></pre></td></tr></table></figure>
+<p>我们继续，这次我们再输入’中’字，如果真是ASCII编码的话，应该是不能正常显示的。</p>
+<p><img src="http://i.imgur.com/r2GQOlN.png" alt=""></p>
+<p>but , 它还是正常显示的。（得，这下招牌砸了…），不管了。我们再用Python读取看看（是不是它也像记事本一样神奇）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">In [3]: f = open(&apos;Demo.txt&apos;)</div><div class="line">In [4]: s = f.read()</div><div class="line">In [5]: print s</div><div class="line">A ��</div></pre></td></tr></table></figure>
+<p>终于看见乱码了，不对啊，怎么一个正常一个乱码呢？不怕，我们再用Notepad++打开看看。</p>
+<p><img src="http://i.imgur.com/zFTyEiR.png" alt=""></p>
+<p>啊啊，不干啦，又是看不懂的。啥子情况呢？这时我们点击Encoding，选择GB2321（GBK的弟弟，他们的关系可以看看前两篇文章或者网上查查，因为Notepad++上没有GBK选项），这时奇迹出现了，抱头痛哭啊。</p>
+<p><img src="http://i.imgur.com/kUP3l19.png" alt=""></p>
+<p>难道真是GBK编码吗？ 我们用Python验证一下。（这里使用codes包，下文还会提到）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [6]: import codecs #可以指定编码</div><div class="line">In [7]: f = codecs.open(&apos;Demo.txt&apos;, encoding=&apos;GBK&apos;)  #以GBK方式打开，用GB2312也行，为什么呢？不告诉你^_^</div><div class="line">In [8]: s = f.read()</div><div class="line">In [9]: print s</div><div class="line">A 中</div></pre></td></tr></table></figure>
+<p>现在知道了吧？ <strong>其实Windows（中文）默认的文件编码是GBK的（</strong>将到Java时也会验证这一点）。还记得我们讨论GBK时，知道它是兼容ASCII的（反正只是加了汉字进去）。所以它可以输入和显示中文（英文正常显示是必须的，世界上几乎所有的编码都能正常显示英文，我们可不一样…）。</p>
+<p>最后，不要被它的外表骗了，我想Python去获取系统文件编码的时候可能就被骗了，当我加入中文时，却还用ASCII编码方式去读取文件，只能是乱码了。（其实，这里说的有点不对，Python2.x默认的编码就是’ASCII’，哈哈）</p>
+<p>文件保存时用的什么编码，我们最好也用什么编码去读取。（为什么不说必须呢，因为有些编码是兼容的，比如UTF-8就兼容ASCII呢）。用记事本也没什么不可以，只要编码指定正确就好了。</p>
+<h3 id="Python源代码文件"><a href="#Python源代码文件" class="headerlink" title="Python源代码文件"></a>Python源代码文件</h3><p>Python源代码文件一般不用我们读取，主要是由Python解释器来读取执行。所以如果它读出来是乱码，咋们的程序就别想运行了。</p>
+<p>还记得这句话吗，就是告诉解释器，读取该文件时请用UTF-8。（如果你文件全是字母的话倒不用，可我们不是还要写中文吗…），如果不声明，解释器将按照默认的编码读取（Python2.x是ASCII, Python3是UTF-8)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># -*- coding: utf-8 -*-</div></pre></td></tr></table></figure>
+<p>上面说的是读取文件时要注意的，同样，从内存中写入文件也要注意编码指定要一致（一致最好）。不能说内存中是’UTF-8’或在’UTF-16’编码的，你却用ASCII去保存，那就有你好看了。（如果在内存中编码为’UTF-16’，一般也是用’UTF-8’保存，不过保存前先做转换，UTF-8常用些）。</p>
+<h2 id="2-内存中，Python怎样进行操作的？"><a href="#2-内存中，Python怎样进行操作的？" class="headerlink" title="2. 内存中，Python怎样进行操作的？"></a>2. 内存中，Python怎样进行操作的？</h2><p>如果用Python2.x读取多个文件，有’UTF-8’、’GBk’编码，我们要将这些文件中的内容合并，然后保存的一个新文件中，那应该怎么做呢？不管， 先将他们读进来再说。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">In [10]: f1 = open(&apos;Demo1.txt&apos;) #f1中只有一个&apos;A&apos; ，记事本默认保存方式</div><div class="line"></div><div class="line">In [11]: f2 = open(&apos;Demo2.txt&apos;) #f2中有一个&apos;A&apos; 和&apos;中&apos; ，记事本默认保存方式</div><div class="line"></div><div class="line">In [12]: f3 = open(&apos;Demo3.txt&apos;) #f3中有一个&apos;A&apos; 和&apos;中&apos; ，选择&apos;UTF-8&apos;保存</div><div class="line"></div><div class="line">In [13]: s1 = f1.read()</div><div class="line"></div><div class="line">In [14]: s2 = f2.read()</div><div class="line"></div><div class="line">In [15]: s3 = f3.read()</div></pre></td></tr></table></figure>
+<p>现在要将他们合并，然后保存。不过，等等，就这样将他们连接起来，他们的编码方式不兼容啊！保存时我们应该选择什么编码保存呢？这是个问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [16]: f4 = open(&apos;Demo4.txt&apos;, &apos;w&apos;) #打开新文件 </div><div class="line"></div><div class="line">In [17]: f4.write(s1 + s2 + s3) #保存</div><div class="line"></div><div class="line">In [18]: f4.close()</div></pre></td></tr></table></figure>
+<p>这时打开文件（就用记事本，吓我一跳，这是什么啊！可以看到前两个文件保存正确，但是第三文件的内容不能正常显示）。</p>
+<p><img src="http://i.imgur.com/VeY1OQG.png" alt=""></p>
+<p>我们知道的是，记事本再神奇也没有这么神奇，知道前面用GBK，后面用UTF-8…<br>所以保存之前，我们可以将他们转换为同一种编码再保存。我们先看看Python2中str与unicode的关系。（str是编码后的；Unicode是未经编码的，其实它就是字符集）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(Python2.x str与unicode的关系)</div><div class="line"></div><div class="line">&lt;type &apos;basestring&apos;&gt;</div><div class="line">   |</div><div class="line">   +--&lt;type &apos;str&apos;&gt;</div><div class="line">   |</div><div class="line">   +--&lt;type &apos;unicode&apos;&gt;</div></pre></td></tr></table></figure>
+<p>原来str,和unicode都是basestring的孩子，由于Python的出现比Unicode字符集出现早，是后来才支持Unicode的。<strong>这里要知道的是，Unicode不是一种编码噢，一个Unicode字符在内存中的值就是在Unicode字符集编号的值</strong>，（<strong>这里还要说一下的就是，记事本中的unicode保存实际是按照UTF-16编码保存的，因为当初Unicode字符集使用16位，而UTF-16也是最小使用16位，所以容易搞错，要记住，Unicode仍然不是指编码</strong>）。这里我们就要使用decode方法，意思就是解码，我们先看看decode是什么意思。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">s.decode(encoding)  #将str解码为Unicode</div><div class="line">&lt;type &apos;str&apos;&gt; to &lt;type &apos;unicode&apos;&gt;</div><div class="line"></div><div class="line">u.encode(encoding) #将Unicode编码str</div><div class="line">&lt;type &apos;unicode&apos;&gt; to &lt;type &apos;str&apos;&gt;</div></pre></td></tr></table></figure>
+<p><strong>这样是不是要方便些呢， 操作是先将str解码为Unicode的，进行操作，待操作完成，我们就可以按照我们想要的编码方式保存啦！（不过，最好还是选择UTF-8保存）</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">In [19]: s1 = s1.decode(&apos;GBK&apos;) #解码 ，这里用GBK, 虽然只有&apos;A&apos;</div><div class="line">Out[19]: u&apos;A&apos;</div><div class="line"></div><div class="line">In [20]: s1 = s2.decode(&apos;GBK&apos;)  #解码</div><div class="line">Out[20]: u&apos;A \u4e2d&apos;</div><div class="line"></div><div class="line">In [21]: s3 = s3.decode(&apos;UTF-8&apos;) #解码</div><div class="line">Out[21]: u&apos;\ufeffA \u4e2d\n&apos;</div><div class="line"></div><div class="line">In [22]: s4 = s1 + s2 + s3  #连接 , 现在s4也为unicode</div><div class="line"></div><div class="line">In [23]: s4 = s4.encode(&apos;UTF-8&apos;) #用&apos;UTF-8&apos;编码</div><div class="line"></div><div class="line">In [24]: f4 = open(&apos;Demo4.txt&apos;, &apos;w&apos;) #打开新文件 </div><div class="line"></div><div class="line">In [25]: f4.write(s4) #保存编码后的字符串</div><div class="line"></div><div class="line">In [26]: f4.close()</div></pre></td></tr></table></figure>
+<p>下面就是见证奇迹的时刻： （你没有看错，正常显示，最后保存用的是UTF-8）。</p>
+<p>你可能说，要不要这么麻烦啊，其实是可以滴，Python提供了codecs,方便我们进行Unicode与str之间的编码和解码操作，下面来演示上面的例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">In [27]: s1 = codecs.open(&apos;Demo1.txt&apos;, encoding=&apos;GBK&apos;).read()</div><div class="line"></div><div class="line">In [28]: s2 = codecs.open(&apos;Demo2.txt&apos;, encoding=&apos;GBK&apos;).read()</div><div class="line"></div><div class="line">In [29]: s3 = codecs.open(&apos;Demo3.txt&apos;, encoding=&apos;UTF-8&apos;).read()</div><div class="line"></div><div class="line">In [30]: f7 = codecs.open(&apos;Demo7.txt&apos;, &apos;w&apos;, encoding=&apos;UTF-8&apos;)</div><div class="line"></div><div class="line">In [31]: f7.write(s1+s2+s3)</div><div class="line"></div><div class="line">In [32]: f7.close() #结果和上面一样，正常显示，最后保存用的是UTF-8</div></pre></td></tr></table></figure>
+<h2 id="3-One-more-thing"><a href="#3-One-more-thing" class="headerlink" title="3. One more thing"></a>3. One more thing</h2><p><strong>要在Python避免乱码，我们需要记住：</strong></p>
+<ul>
+<li><strong>Decode early</strong> #可以自己decode,也可以使用codes.open</li>
+<li><strong>Unicode everywhere</strong> #操作时，一律unicode</li>
+<li><strong>Encode late</strong> #要保存是，记得编码，可以用encode，或者codes.open</li>
+</ul>
+<p>所以，最好的情况还是用文件保存的编码打开（因为不确定是否为UTF-8编码的），然后解码为Unicode，进行操作，然后保存。（下面我以UTF-8文件为例子，有图有真相^_^）。</p>
+<p><img src="http://i.imgur.com/AGUbFqq.png" alt=""></p>
+<h2 id="4-关于print输出问题"><a href="#4-关于print输出问题" class="headerlink" title="4. 关于print输出问题"></a>4. 关于print输出问题</h2><p>关于为什么是Unicode，我们用print输出时我们可以看见正确的字符呢？按理来说我们应该先对其进行编码才行呢？其实，在调用print输出时，Python已经按照UTF-8对其进行编码了。我们来验证一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">In [33]: import sys</div><div class="line"></div><div class="line">In [34]: sys.stdout.encoding</div><div class="line"></div><div class="line">Out[34]: &apos;UTF-8&apos;</div><div class="line"></div><div class="line">In [35]: print u&apos;\u2713&apos; #Python帮我们编码了</div><div class="line">✓</div></pre></td></tr></table></figure>
+<p>最后在附上一张图（证明上面使用的是Unicode的编号，可以在<a href="http://unicode-table.com/cn/#control-character" target="_blank" rel="external">这里</a>查找）：</p>
+<p><img src="http://i.imgur.com/ttdQkQh.png" alt=""></p>
+<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/25/248213.html" target="_blank" rel="external">Java中的字符集编码入门（五）Java代码中的字符编码转换Part 1</a><br><a href="http://farmdev.com/talks/unicode/" target="_blank" rel="external">Unicode In Python, Completely Demystified</a><br><a href="http://stackoverflow.com/questions/11339955/python-string-encode-decode" target="_blank" rel="external">python string encode / decode</a><br><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">Python字符串和编码</a><br><a href="http://stackoverflow.com/questions/2596714/why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii" target="_blank" rel="external">why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这是之前写的文章，因为博客地址换了，重新发布下。&lt;/p&gt;
+&lt;p&gt;这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;/2017/08/28/charset-en
+    
+    </summary>
+    
+    
+      <category term="编码 字符集 Python" scheme="http://aoty.github.io/tags/%E7%BC%96%E7%A0%81-%E5%AD%97%E7%AC%A6%E9%9B%86-Python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>编码？你需要知道的那些事：2-明白编码</title>
+    <link href="http://aoty.github.io/2017/08/29/charset-encoding-2/"/>
+    <id>http://aoty.github.io/2017/08/29/charset-encoding-2/</id>
+    <published>2017-08-29T07:05:44.000Z</published>
+    <updated>2017-08-29T11:04:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>这是之前写的文章，因为博客地址换了，重新发布下。</p>
+<p>这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新：</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">关于Python3 的编码</a></p>
+<p><a href="/2017/08/28/charset-encoding-1/">上文</a>我们说到了字符集，它决定了我们能够看到那些字符，但是字符怎么在计算机内存中表示的可是由编码来决定的喔。</p>
+<p>我们知道计算机只认识数字（就是0、1那些东西），可是我们对数字并没有计算机那么敏感，我们还是喜欢看到字符（正如书本上能看到的那样）。这时就需要编码了，当我们需要看到字符时，它会将内存中的数字（一串二进制数）映射为对应的字符来显示给我们看。而只是内存中处理时，任然是一堆数字。</p>
+<p>问题来了，怎么映射的呢？简单来说就是查表呗（当然是提前定义好的），用数字去找它对应的字符。那这个表是不是我们<a href="/2017/08/28/charset-encoding-1/">上文</a>说到的字符集呢？是，还是不是呢，其实不一定。又迷糊了吧？不过请先记着一句话：<strong>一个字符集可以对应很多编码的实现。</strong></p>
+<p>那我们分别来看看每种字符集的编码都有哪些实现吧！</p>
+<h2 id="1-ASCII字符集的编码"><a href="#1-ASCII字符集的编码" class="headerlink" title="1. ASCII字符集的编码"></a>1. ASCII字符集的编码</h2><p>其实就叫ASCII编码，可没有骗你，因为该编码中字符在内存中使用的值与字符集规定编号的一样，也就是说，存储该种字符时，就是将字符集中的编号变为二进制书就好了。（比如1，在字符集的编号为1，人家在内存也是0000 0001）因为一样，所以它对我们还算友善(理错误也不会犯迷糊)。但是下面的一个可就不是这样了。</p>
+<h2 id="2-Unicode字符集的编码"><a href="#2-Unicode字符集的编码" class="headerlink" title="2. Unicode字符集的编码"></a>2. Unicode字符集的编码</h2><p>上文提到Unicode与UCS合并了，统一了规则，那我们就说说常用的Unicode编码：UTF-8, UTF-16, UTF-32。</p>
+<h3 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a>UTF-8</h3><p>UTF-8（8-bit Unicode Transformation Format）是一种针对Unicode的可变长度字符编码，看见了吗，它是可变的，为什么呢？<a href="">上文</a>提到Unicode字符集一开始使用的是16位，但是不够，而UCS一上来使用31位，太多，而且美国人们也不干了，凭什么我们7位可以表示的东西，你们偏偏要拿这么多位来表示。（浪费，可耻啊！）故UTF-8就是一个折中的办法，看它的名字’UTF-8’像只是用8位是的，但是不是的。你可以理解为它最少使用8位（’UTF-16’和’UTF-32’一样）。<strong>所以UTF-8这种编码，字符在内存中的值与Unicode规定的编号是不一定一样的</strong>，比如UTF-8是兼容ASCII编码的，对于英文字符，他们将会其编码成1个字节（尽管只用了7位，但是占了8位嘛，正好一个字节），此时UTF-8表示与ASCII字符表示是一样的。但是很多其他的字符编码后可就与其在字符集的编号不一样了，比如’中’在Unicode编号为0x4E2D ,但是在UTF-8编码后却为0xE6B189。现在应该对字符集和编码有了更深的认识。</p>
+<h3 id="UTF-16"><a href="#UTF-16" class="headerlink" title="UTF-16"></a>UTF-16</h3><p>UTF-16也是Unicode的其中一个使用方式。 <strong>UTF-16比起UTF-8，好处在于大部分字符都以固定长度的字节 (2字节) 储存，但UTF-16却无法兼容于ASCII编码。</strong> 所以UTF-8对Unicode规定的前65536字符不做转换（还记得前面说的Unicode开始设计的表示字符大小吗？），就是用其编号作为编码后的值，比如’中’在Unicode编号为0x4E2D ,在UTF-16编码后也为0x4E2D。（但是对于之后的值，它也需要做变换），注意<strong>通常我们说的Unicode的编码就是它，因为它前65536个字符的编码与编号一致，但是现在要知道的是Unicode只用字符集，而UTF-16才是编码。希望明白了。</strong></p>
+<h3 id="UTF-32"><a href="#UTF-32" class="headerlink" title="UTF-32"></a>UTF-32</h3><p>UTF-32就厉害了,它对所有的Unicode字符均不做变换，直接使用编号存储！（这样会简单很多），只是这种编码方案太浪费存储空间（就连1个字节就可以搞定的英文字符，它都必须使用4个字节），因而尽管使用起来方便（不需要任何转换），却没有得到普及。</p>
+<h2 id="3-GB2312和GBK字符集的编码"><a href="#3-GB2312和GBK字符集的编码" class="headerlink" title="3. GB2312和GBK字符集的编码"></a>3. GB2312和GBK字符集的编码</h2><p>还记得<a href="/2017/08/28/charset-encoding-1/">上文</a>说的GB2312和GBK字符集吗？其实你也可以叫它们是一种编码（对了，中文Windows的默认编码就是GBK），因为它们也是使用字符集中的编号作为编码值的（和UTF-32一样，直接，暴力），哈哈。不过，现在知道它们的关系了,一览无余呢…</p>
+<h2 id="4-One-more-thing"><a href="#4-One-more-thing" class="headerlink" title="4. One more thing"></a>4. One more thing</h2><p>现在可以回答<strong>UTF-8 ? UTF-16? UTF-32? ISO-8859-*? ASCII? GB2312? GBK? Unicode? UCS?</strong>哪些是字符集，哪些是编码，那些既可以说的字符集又可以说是编码了吧！</p>
+<ul>
+<li>ASCII GB2312 GBK Unicode UCS 可以说是字符集</li>
+<li>UTF-8 UTF-16 UTF-32 ISO-8859-*（系列） ASCII GB2312 GBK 都可以说是编码</li>
+<li>ASCII GB2312 GBK 这些嘛？你懂的。</li>
+</ul>
+<p><a href="/2017/08/29/charset-encoding-3/">下篇文章</a>我们讨论一下在哪些地方容易出现编码问题（乱码）呢？</p>
+<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248041.html" target="_blank" rel="external">Java中的字符集编码入门（二）编码字符集与字符集编码的区别</a><br><a href="https://en.wikipedia.org/wiki/UTF-8#Examples" target="_blank" rel="external">UTF-8</a><br><a href="https://en.wikipedia.org/wiki/UTF-16" target="_blank" rel="external">UTF-16</a><br><a href="https://en.wikipedia.org/wiki/UTF-32" target="_blank" rel="external">UTF-32</a><br><a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;item_id=IWS-AppendixA#sec3。" target="_blank" rel="external">Mapping codepoints to Unicode encoding forms</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这是之前写的文章，因为博客地址换了，重新发布下。&lt;/p&gt;
+&lt;p&gt;这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;/2017/08/28/charset-en
+    
+    </summary>
+    
+    
+      <category term="编码 字符集" scheme="http://aoty.github.io/tags/%E7%BC%96%E7%A0%81-%E5%AD%97%E7%AC%A6%E9%9B%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>编码？你需要知道的那些事：1-了解字符集</title>
+    <link href="http://aoty.github.io/2017/08/28/charset-encoding-1/"/>
+    <id>http://aoty.github.io/2017/08/28/charset-encoding-1/</id>
+    <published>2017-08-28T14:56:12.000Z</published>
+    <updated>2017-08-29T13:18:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>这是之前写的文章，因为博客地址换了，重新发布下。</p>
+<p>这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新：</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">关于Python3 的编码</a></p>
+<p>相信大家都遇到过编码问题（正所谓所有问题都解决了，就剩下乱码了^_^）。每次出现这种问题时心里各种不爽，还让不让愉快地写代码了，人家不干了， 程序何必难为程序员啊！<br>你这时拍案而起，扬长而去，留下潇洒的背影…但是问题并么有解决，还是得埋头苦干啊 ， 乱码是怎么来的呢？</p>
+<p><img src="http://i.imgur.com/CH5cp49.png" alt=""><br>​                    <a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">图片来源</a></p>
+<p>要明白这个问题， 我们得先了解两个概念（可以说是非常重要的吧）。</p>
+<ol>
+<li><strong>编码字符集(Charset)，以下称为字符集</strong></li>
+<li><strong>字符集编码(Encoding)，以下称为编码</strong></li>
+</ol>
+<p>我们先来了解字符集是什么东东,<a href="(/2017/08/29/charset-encoding-2/">下篇</a>)再进行讨论编码。</p>
+<h2 id="1-字符集-Charset"><a href="#1-字符集-Charset" class="headerlink" title="1. 字符集(Charset)"></a>1. 字符集(Charset)</h2><p>简单来说，字符集就是我们能看到的东西，它决定了我们能在计算机上看到什么。我们常见常用的字符集有哪些呢？ <strong>UTF-8 ? UTF-16? UTF-32? ISO-8859-*? ASCII? GB2312? GBK? Unicode? UCS?</strong>好吧， 你知道的真不少，但是上面的不全是所谓的字符集。有些我们叫字符集，有些叫编码，有些居然即又叫字符集又叫编码。希望你没有被弄迷糊。不过，先看，最后给出总结。</p>
+<h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p>没错，就是大名鼎鼎的ASCII(American Standard Code for Information Interchange，美国信息交换标准代码）。注意哦，它主要用于显示<strong>现代英语</strong>的（原因你懂的，毕竟人家是先行者）。<strong>ASCII等同于国际标准ISO/IEC 646。</strong></p>
+<p>ASCII规定的一个字符占8位（8位可以表示的字符为：2^8=256个），但是美国人民说，我们只需要空格及94个“可印刷字符”就够了（没办法，任性），这时，<a href="http://www.iso.org/iso/home.html" target="_blank" rel="external">国际标准化组织(ISO)</a>及<a href="http://www.iec.ch/" target="_blank" rel="external">国际电工委员会(IEC)</a>提出，可以使用剩下的区域来储存及表示其他使用拉丁字母的语言（主要是欧洲国家的语言）嘛,从此便有了ISO 8859-*系列（兼容ASCII，因为主要进行的是扩展），比如（ISO/IEC 8859-1 (Latin-1) - 西欧语言，ISO/IEC 8859-2 (Latin-2) - 中欧语言等等）。</p>
+<h3 id="Unicode和UCS"><a href="#Unicode和UCS" class="headerlink" title="Unicode和UCS"></a>Unicode和UCS</h3><p><strong>Unicode：</strong>来源于美国加州的Unicode组织（包括苹果，惠普，微软，施乐等公司）。Unicode是为了解决传统的字符集方案的局限而产生的，例如上面提到的ISO 8859-1字符集虽然在特定的国家广泛使用，可是在不同国家间却经常出现不兼容的情况（此时很多国家都有自己的字符集，比如我们，谁叫ASCII不支持中文的…）。</p>
+<p>Unicode的目的之一就是让世界人民都用Ta家的字符集，Ta的方法也是非常的简单粗暴，不就是字符太多8位表示不了吗？加！所以Ta一开始采用了16位（2^16=65536）, 可以表示65536个字符，可Ta万万没想到的是，全世界的字符数量超乎Ta想象，待Ta认识到时，Unicode的规范已经制定的八九不离十了，也得到了很大的普及（看看Ta的组成公司就知道了），重新来过是不可能了，所以Ta也给我们带来了一点点的麻烦（但是当初的目的是好的），等我们讨论到编码问题时还会说到这个问题的解决方法（当然是一个妥协的方法）。</p>
+<p><strong>UCS（ Universal Coded Character Set）：</strong> 在Unicode制定的同时，还有一个机构也在为世界人民的幸福苦苦思索，他就是我们上面提到的<a href="http://www.iso.org/iso/home.html" target="_blank" rel="external">国际标准化组织(ISO)</a>（好像哪里都有他的事…），他提出了UCS字符集，也就是ISO/IEC 10646 （名字好像上面提到的ISO/IEC 646他哥）。CUS定义了一个31位的字符集（一共是32位，不过只用31位来表示字符，其实已经很多了），这样可以表示的字符贼大了（2^31=2147483648个），足以包括世界上所有的字符（火星的呢，还不确定）。但是他也有一个问题，一个字符’A’,ASCII一共占用8位，而他却要占用32位，也太浪费了不是，当初的计算机内存可是很珍贵的（现在也一样），同样在讨论编码问题时，也会说到一个解决办法（同样是折中的）。</p>
+<p><strong>UCS与Unicode合并？</strong> 由于Unicode与UCS(ISO/IEC 10646国际编码标准)从内容上来说是同步一致的。在1991年，Unicode与ISO国际标准化组织决定共同制订一套适用于多种语言文本的通用编码标准。Unicode与UCS于1992年1月正式合作发展一套通用编码标准。（两者付出了很多的努力，因为他们一开始就是不兼容的，但是幸运的是，他们的努力得到了回报，非常感人）。最终，两者统一了字符集（即任何一个在Unicode中存在的字符，在UCS中也存在），且最靠前的65535个字符也统一了字符的编码。对于码空间，两者同意以一百一十万为限（即两者都认为虽然65536不够，但2的31次方又太大，一百一十万是个双方都可接受的码空间大小，也够用，当然，这里说的一百一十万只是个约数），Unicode将码空间扩展到了一百一十万，而UCS将不使用一百一十万以后的码位。也就是说，<strong>现在再讲Unicode只包含65536个字符是不对的</strong>。除了对已经定义的字符进行统一外，Unicode联盟与ISO工作组也同意今后任何的扩展工作两者均保持同步，因此虽然从历史的意义上讲Unicode与UCS不是一回事（甚至细节上说也不是一回事），<strong>但现在提起Unicode，指代两者均无不妥。</strong></p>
+<h3 id="B2312和GBK"><a href="#B2312和GBK" class="headerlink" title="B2312和GBK"></a>B2312和GBK</h3><p>终于说到咱们的字符集了（注意目前一直在讲的都是字符集），那就是熟悉而又陌生的GB2312和GBK，是不是很鸡冻呢？<br><strong>GB2312：</strong>全称是:信息交换用汉字编码字符集，可见，最初它就是一种字符集，它兼容ASCII，同时加入了6763个汉字和一些其他字符。</p>
+<p><strong>GBK：</strong>全称是:汉字内码扩展规范,看着名字就知道了，他其实是GB2312的扩展，加入了更多的汉字。</p>
+<p><strong>不对,GB2312和GBK不是常说的编码吗？</strong>，好吧，等我们讨论到编码时再来回答这个问题。</p>
+<h2 id="2-回顾字符集"><a href="#2-回顾字符集" class="headerlink" title="2. 回顾字符集"></a>2. 回顾字符集</h2><p>上面讨论到了这么多的字符集ASCII, Unicode, USC，GBK等等，他们的意义就是决定了我们可以看到的字符总数（当然是在计算机中啦，手写谁不会呢…）。编码准备留到<a href="(/2017/08/29/charset-encoding-2/">下一篇</a>)文章讨论。</p>
+<h2 id="3-参考资料"><a href="#3-参考资料" class="headerlink" title="3. 参考资料"></a>3. 参考资料</h2><p><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000" target="_blank" rel="external">Python字符串和编码</a><br><a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=iws-appendixa" target="_blank" rel="external">Mapping codepoints to Unicode encoding forms</a><br><a href="http://www.joelonsoftware.com/articles/Unicode.html" target="_blank" rel="external">The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)</a><br><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248014.html" target="_blank" rel="external">Java中的字符集编码入门</a><br><a href="http://stackoverflow.com/questions/2281646/whats-the-difference-between-encoding-and-charset" target="_blank" rel="external">What’s the difference between encoding and charset?</a><br><a href="https://zh.wikipedia.org/wiki/Unicode" target="_blank" rel="external">Unicode</a><br><a href="https://zh.wikipedia.org/wiki/%E9%80%9A%E7%94%A8%E5%AD%97%E7%AC%A6%E9%9B%86#Unicode.E5.92.8CISO_10646.E7.9A.84.E5.85.B3.E7.B3.BB" target="_blank" rel="external">通用字符集</a><br><a href="https://zh.wikipedia.org/wiki/UTF-8" target="_blank" rel="external">UTF-8</a><br><a href="http://unicode.org/" target="_blank" rel="external">unicode.org</a><br><a href="http://baike.baidu.com/view/40801.htm" target="_blank" rel="external">unicode百科</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这是之前写的文章，因为博客地址换了，重新发布下。&lt;/p&gt;
+&lt;p&gt;这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;/2017/08/28/charset-en
+    
+    </summary>
+    
+    
+      <category term="编码 字符集" scheme="http://aoty.github.io/tags/%E7%BC%96%E7%A0%81-%E5%AD%97%E7%AC%A6%E9%9B%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://aoty.github.io/2017/08/28/%20%20/"/>
+    <id>http://aoty.github.io/2017/08/28/  /</id>
+    <published>2017-08-28T14:23:50.000Z</published>
+    <updated>2017-08-28T14:23:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>

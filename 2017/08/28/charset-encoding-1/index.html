@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>编码？你需要知道的那些事：1-了解字符集 | AotY&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="编码 字符集," />
+  
+
+  <meta name="description" content="这是之前写的文章，因为博客地址换了，重新发布下。 这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新： 关于Python3 的编码 相信大家都遇到过编码问题（正所谓所">
+<meta name="keywords" content="编码 字符集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码？你需要知道的那些事：1-了解字符集">
+<meta property="og:url" content="http://aoty.github.io/2017/08/28/charset-encoding-1/index.html">
+<meta property="og:site_name" content="AotY&#39;s Blog">
+<meta property="og:description" content="这是之前写的文章，因为博客地址换了，重新发布下。 这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新： 关于Python3 的编码 相信大家都遇到过编码问题（正所谓所">
+<meta property="og:image" content="http://i.imgur.com/CH5cp49.png">
+<meta property="og:updated_time" content="2017-08-29T13:18:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编码？你需要知道的那些事：1-了解字符集">
+<meta name="twitter:description" content="这是之前写的文章，因为博客地址换了，重新发布下。 这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新： 关于Python3 的编码 相信大家都遇到过编码问题（正所谓所">
+<meta name="twitter:image" content="http://i.imgur.com/CH5cp49.png">
+
+  
+
+  
+    <link rel="icon" href="https://ws3.sinaimg.cn/large/006tNc79ly1fiztujvadej308e08emyz.jpg">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts List</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-字符集-Charset"><span class="toc-text">1. 字符集(Charset)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ASCII"><span class="toc-text">ASCII</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unicode和UCS"><span class="toc-text">Unicode和UCS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B2312和GBK"><span class="toc-text">B2312和GBK</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-回顾字符集"><span class="toc-text">2. 回顾字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-参考资料"><span class="toc-text">3. 参考资料</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-charset-encoding-1" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">编码？你需要知道的那些事：1-了解字符集</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.08.28</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>AotY</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://aoty.github.io/2017/08/28/charset-encoding-1/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <blockquote>
+<p>这是之前写的文章，因为博客地址换了，重新发布下。</p>
+<p>这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新：</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">关于Python3 的编码</a></p>
+<p>相信大家都遇到过编码问题（正所谓所有问题都解决了，就剩下乱码了^_^）。每次出现这种问题时心里各种不爽，还让不让愉快地写代码了，人家不干了， 程序何必难为程序员啊！<br>你这时拍案而起，扬长而去，留下潇洒的背影…但是问题并么有解决，还是得埋头苦干啊 ， 乱码是怎么来的呢？</p>
+<p><img src="http://i.imgur.com/CH5cp49.png" alt=""><br>​                    <a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">图片来源</a></p>
+<p>要明白这个问题， 我们得先了解两个概念（可以说是非常重要的吧）。</p>
+<ol>
+<li><strong>编码字符集(Charset)，以下称为字符集</strong></li>
+<li><strong>字符集编码(Encoding)，以下称为编码</strong></li>
+</ol>
+<p>我们先来了解字符集是什么东东,<a href="(/2017/08/29/charset-encoding-2/">下篇</a>)再进行讨论编码。</p>
+<h2 id="1-字符集-Charset"><a href="#1-字符集-Charset" class="headerlink" title="1. 字符集(Charset)"></a>1. 字符集(Charset)</h2><p>简单来说，字符集就是我们能看到的东西，它决定了我们能在计算机上看到什么。我们常见常用的字符集有哪些呢？ <strong>UTF-8 ? UTF-16? UTF-32? ISO-8859-*? ASCII? GB2312? GBK? Unicode? UCS?</strong>好吧， 你知道的真不少，但是上面的不全是所谓的字符集。有些我们叫字符集，有些叫编码，有些居然即又叫字符集又叫编码。希望你没有被弄迷糊。不过，先看，最后给出总结。</p>
+<h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p>没错，就是大名鼎鼎的ASCII(American Standard Code for Information Interchange，美国信息交换标准代码）。注意哦，它主要用于显示<strong>现代英语</strong>的（原因你懂的，毕竟人家是先行者）。<strong>ASCII等同于国际标准ISO/IEC 646。</strong></p>
+<p>ASCII规定的一个字符占8位（8位可以表示的字符为：2^8=256个），但是美国人民说，我们只需要空格及94个“可印刷字符”就够了（没办法，任性），这时，<a href="http://www.iso.org/iso/home.html" target="_blank" rel="external">国际标准化组织(ISO)</a>及<a href="http://www.iec.ch/" target="_blank" rel="external">国际电工委员会(IEC)</a>提出，可以使用剩下的区域来储存及表示其他使用拉丁字母的语言（主要是欧洲国家的语言）嘛,从此便有了ISO 8859-*系列（兼容ASCII，因为主要进行的是扩展），比如（ISO/IEC 8859-1 (Latin-1) - 西欧语言，ISO/IEC 8859-2 (Latin-2) - 中欧语言等等）。</p>
+<h3 id="Unicode和UCS"><a href="#Unicode和UCS" class="headerlink" title="Unicode和UCS"></a>Unicode和UCS</h3><p><strong>Unicode：</strong>来源于美国加州的Unicode组织（包括苹果，惠普，微软，施乐等公司）。Unicode是为了解决传统的字符集方案的局限而产生的，例如上面提到的ISO 8859-1字符集虽然在特定的国家广泛使用，可是在不同国家间却经常出现不兼容的情况（此时很多国家都有自己的字符集，比如我们，谁叫ASCII不支持中文的…）。</p>
+<p>Unicode的目的之一就是让世界人民都用Ta家的字符集，Ta的方法也是非常的简单粗暴，不就是字符太多8位表示不了吗？加！所以Ta一开始采用了16位（2^16=65536）, 可以表示65536个字符，可Ta万万没想到的是，全世界的字符数量超乎Ta想象，待Ta认识到时，Unicode的规范已经制定的八九不离十了，也得到了很大的普及（看看Ta的组成公司就知道了），重新来过是不可能了，所以Ta也给我们带来了一点点的麻烦（但是当初的目的是好的），等我们讨论到编码问题时还会说到这个问题的解决方法（当然是一个妥协的方法）。</p>
+<p><strong>UCS（ Universal Coded Character Set）：</strong> 在Unicode制定的同时，还有一个机构也在为世界人民的幸福苦苦思索，他就是我们上面提到的<a href="http://www.iso.org/iso/home.html" target="_blank" rel="external">国际标准化组织(ISO)</a>（好像哪里都有他的事…），他提出了UCS字符集，也就是ISO/IEC 10646 （名字好像上面提到的ISO/IEC 646他哥）。CUS定义了一个31位的字符集（一共是32位，不过只用31位来表示字符，其实已经很多了），这样可以表示的字符贼大了（2^31=2147483648个），足以包括世界上所有的字符（火星的呢，还不确定）。但是他也有一个问题，一个字符’A’,ASCII一共占用8位，而他却要占用32位，也太浪费了不是，当初的计算机内存可是很珍贵的（现在也一样），同样在讨论编码问题时，也会说到一个解决办法（同样是折中的）。</p>
+<p><strong>UCS与Unicode合并？</strong> 由于Unicode与UCS(ISO/IEC 10646国际编码标准)从内容上来说是同步一致的。在1991年，Unicode与ISO国际标准化组织决定共同制订一套适用于多种语言文本的通用编码标准。Unicode与UCS于1992年1月正式合作发展一套通用编码标准。（两者付出了很多的努力，因为他们一开始就是不兼容的，但是幸运的是，他们的努力得到了回报，非常感人）。最终，两者统一了字符集（即任何一个在Unicode中存在的字符，在UCS中也存在），且最靠前的65535个字符也统一了字符的编码。对于码空间，两者同意以一百一十万为限（即两者都认为虽然65536不够，但2的31次方又太大，一百一十万是个双方都可接受的码空间大小，也够用，当然，这里说的一百一十万只是个约数），Unicode将码空间扩展到了一百一十万，而UCS将不使用一百一十万以后的码位。也就是说，<strong>现在再讲Unicode只包含65536个字符是不对的</strong>。除了对已经定义的字符进行统一外，Unicode联盟与ISO工作组也同意今后任何的扩展工作两者均保持同步，因此虽然从历史的意义上讲Unicode与UCS不是一回事（甚至细节上说也不是一回事），<strong>但现在提起Unicode，指代两者均无不妥。</strong></p>
+<h3 id="B2312和GBK"><a href="#B2312和GBK" class="headerlink" title="B2312和GBK"></a>B2312和GBK</h3><p>终于说到咱们的字符集了（注意目前一直在讲的都是字符集），那就是熟悉而又陌生的GB2312和GBK，是不是很鸡冻呢？<br><strong>GB2312：</strong>全称是:信息交换用汉字编码字符集，可见，最初它就是一种字符集，它兼容ASCII，同时加入了6763个汉字和一些其他字符。</p>
+<p><strong>GBK：</strong>全称是:汉字内码扩展规范,看着名字就知道了，他其实是GB2312的扩展，加入了更多的汉字。</p>
+<p><strong>不对,GB2312和GBK不是常说的编码吗？</strong>，好吧，等我们讨论到编码时再来回答这个问题。</p>
+<h2 id="2-回顾字符集"><a href="#2-回顾字符集" class="headerlink" title="2. 回顾字符集"></a>2. 回顾字符集</h2><p>上面讨论到了这么多的字符集ASCII, Unicode, USC，GBK等等，他们的意义就是决定了我们可以看到的字符总数（当然是在计算机中啦，手写谁不会呢…）。编码准备留到<a href="(/2017/08/29/charset-encoding-2/">下一篇</a>)文章讨论。</p>
+<h2 id="3-参考资料"><a href="#3-参考资料" class="headerlink" title="3. 参考资料"></a>3. 参考资料</h2><p><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000" target="_blank" rel="external">Python字符串和编码</a><br><a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=iws-appendixa" target="_blank" rel="external">Mapping codepoints to Unicode encoding forms</a><br><a href="http://www.joelonsoftware.com/articles/Unicode.html" target="_blank" rel="external">The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)</a><br><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248014.html" target="_blank" rel="external">Java中的字符集编码入门</a><br><a href="http://stackoverflow.com/questions/2281646/whats-the-difference-between-encoding-and-charset" target="_blank" rel="external">What’s the difference between encoding and charset?</a><br><a href="https://zh.wikipedia.org/wiki/Unicode" target="_blank" rel="external">Unicode</a><br><a href="https://zh.wikipedia.org/wiki/%E9%80%9A%E7%94%A8%E5%AD%97%E7%AC%A6%E9%9B%86#Unicode.E5.92.8CISO_10646.E7.9A.84.E5.85.B3.E7.B3.BB" target="_blank" rel="external">通用字符集</a><br><a href="https://zh.wikipedia.org/wiki/UTF-8" target="_blank" rel="external">UTF-8</a><br><a href="http://unicode.org/" target="_blank" rel="external">unicode.org</a><br><a href="http://baike.baidu.com/view/40801.htm" target="_blank" rel="external">unicode百科</a></p>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.png" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/08/28/  /">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2017/08/29/charset-encoding-2/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'AotY';
+    
+    var disqus_url = 'http://aoty.github.io/2017/08/28/charset-encoding-1/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//AotY.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

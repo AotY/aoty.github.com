@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python3 编码 | AotY&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="编码 字符集 Python," />
+  
+
+  <meta name="description" content="由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新 Python3 编码  The rules for translating a Unicode">
+<meta name="keywords" content="编码 字符集 Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python3 编码">
+<meta property="og:url" content="http://aoty.github.io/2017/08/29/charset-encoding-5/index.html">
+<meta property="og:site_name" content="AotY&#39;s Blog">
+<meta property="og:description" content="由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新 Python3 编码  The rules for translating a Unicode">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fj0vcd2olwj319u0gogpi.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vhswc1jj317k0saafq.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vx1wt6vj30xk0bgq3m.jpg">
+<meta property="og:image" content="http://i.imgur.com/ttdQkQh.png">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1fj0wgt7hrnj30bg0hgaas.jpg">
+<meta property="og:updated_time" content="2017-08-29T13:23:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python3 编码">
+<meta name="twitter:description" content="由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新 Python3 编码  The rules for translating a Unicode">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fj0vcd2olwj319u0gogpi.jpg">
+
+  
+
+  
+    <link rel="icon" href="https://ws3.sinaimg.cn/large/006tNc79ly1fiztujvadej308e08emyz.jpg">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts List</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-默认编码变化"><span class="toc-text">1. 默认编码变化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-str与bytes"><span class="toc-text">2. str与bytes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-参考资料"><span class="toc-text">3. 参考资料</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-charset-encoding-5" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Python3 编码</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.08.29</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>AotY</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://aoty.github.io/2017/08/29/charset-encoding-5/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <blockquote>
+<p>由于Python3编码方面的内容变化很多，所以重新写一篇文章来讨论一下。也当成自己学习d的记录了。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">Python3 编码</a></p>
+<blockquote>
+<p>The rules for translating a Unicode string into a sequence of bytes are called an <strong>encoding</strong>.<br>Unicode字符串转换成字节序列的规则被称为编码。</p>
+</blockquote>
+<p>之前的<a href="/2017/08/29/charset-encoding-3/">文章</a>里面提到过，Python2.x默认的编码是ascii（因为当初Python诞生的时候，还没有Unicode，具体的看之前<a href="/2017/08/29/charset-encoding-3/">文章</a>），这也是为什么我们讨论在Python2.x中出现乱码的情况。</p>
+<h2 id="1-默认编码变化"><a href="#1-默认编码变化" class="headerlink" title="1. 默认编码变化"></a>1. 默认编码变化</h2><p>在Python3中，默认编码变为了utf-8，我们可以进行验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import sys</div><div class="line">sys.getdefaultencoding()</div><div class="line">Out[2]: &apos;utf-8&apos;</div></pre></td></tr></table></figure>
+<p>这样我们在使用print函数、读取文件、保存文件时，Python3默认都会使用utf-8进行编码。</p>
+<p>下面做一个测试。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fj0vcd2olwj319u0gogpi.jpg" alt="Screen Shot 2017-08-29 at 20.30.59"><br>这是一个使用GB 18030（也是一类GBK编码标准，主要是增加了汉字数量）编码保存的文件，我们在Python中使用默认方式打开会出现什么结果呢？</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vhswc1jj317k0saafq.jpg" alt="WX20170829-203515@2x"></p>
+<p>都不让打开，直接报错，肯定的毕竟UTF-8和GBK不兼容。正确方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">f = open(&apos;gbk.txt&apos;, &apos;r&apos;, encoding=&apos;gbk&apos;)</div><div class="line">f.read()</div><div class="line">Out[59]: &apos;这个测试文件&apos;</div></pre></td></tr></table></figure>
+<p>看来，是和GBK说再见的时候了（尽量少用），如果都使用默认编码的话一般不会再出现乱码问题了。</p>
+<p>下面介绍utf-8编码的规则和好处。</p>
+<ol>
+<li><p>utf-8进行编码的规则：</p>
+<ul>
+<li>如果Unicode码位（编号）&lt; 128，则由相应的字节值表示。</li>
+<li>如果Unicode码位（编号）&gt; = 128，将它变成两个，三个或四个字节的序列，其中序列的每个字节都在128到255之间。</li>
+</ul>
+</li>
+<li><p>使用utf-8进行编码的好处（半翻译）：</p>
+<ul>
+<li><p>它可以处理任意Unicode码位（编号）。</p>
+</li>
+<li><p>将一个Unicode字符串变成一个不包含嵌入零字节的字节序列。</p>
+</li>
+<li><p>一串ASCII文本也是有效的UTF-8文本（具有兼容性）。</p>
+</li>
+<li><p>UTF-8相当紧凑，大多数常用字符可以用一个或两个字节表示（节省内存）。</p>
+</li>
+<li><p>如果字节损坏或丢失，可以确定下一个UTF-8编码代码点的开始并重新同步。</p>
+<p>​</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-str与bytes"><a href="#2-str与bytes" class="headerlink" title="2. str与bytes"></a>2. str与bytes</h2><p>Python2.x中，字符串有两种表现类型：一个是Unicode（表示文本字符串）、一个是str（表示字节序列）。</p>
+<p>在Python3.x中，使用str表示字符串，bytes表示字节序列。官方文档是这样介绍的：</p>
+<ul>
+<li><p>str （字符）</p>
+<p>Strings are immutable sequences of Unicode code points. </p>
+<p>str是一串不可变的Unicode码位（编码）序列。</p>
+</li>
+<li><p>bytes（字节）</p>
+<p>bytes is an immutable sequence of integers in the range <code>0 &lt;= x &lt; 256</code>.</p>
+<p>bytes是一串不可变的整数（0 &lt;= x &lt; 256）序列。</p>
+</li>
+</ul>
+<p>下面这张图可以一定程度上说明区别。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vx1wt6vj30xk0bgq3m.jpg" alt="WX20170829-205039@2x"></p>
+<p>现在我们定义一个str字符，它默认就是一个Unicode的字符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">duigou = &apos;✓&apos; # 定义字符</div><div class="line">ord(duigou) # 获取字符在Unicode中的码位</div><div class="line">Out[18]: 10003 # 码位</div></pre></td></tr></table></figure>
+<p>上面输出的<strong>10003</strong>（十六进制表示为0x2713）正是<a href="https://unicode-table.com/cn/2713/" target="_blank" rel="external">对钩字符</a>在Unicode中的编号（码位）。</p>
+<p><img src="http://i.imgur.com/ttdQkQh.png" alt=""></p>
+<p>现在我们使用utf-8编码将字符编码为字节：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">duigou.encode(<span class="string">'utf-8'</span>) <span class="comment"># 编码 或者 bytes(s, encoding='utf-8')</span></div><div class="line">Out[<span class="number">20</span>]: <span class="string">b'\xe2\x9c\x93'</span> <span class="comment"># 输出，注意utf-8是变长编码</span></div><div class="line"></div><div class="line">type(<span class="string">b'\xe2\x9c\x93'</span>) <span class="comment">#查看type</span></div><div class="line">Out[<span class="number">30</span>]: bytes</div></pre></td></tr></table></figure>
+<p>可以看出✓字符使用utf-8编码后是三个字节，如果使用GBK进行编码呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">duigou.encode(&apos;gbk&apos;)</div><div class="line">---------------------------------------------------------------------------</div><div class="line">UnicodeEncodeError                        Traceback (most recent call last)</div><div class="line">&lt;ipython-input-27-3cbb798ed584&gt; in &lt;module&gt;()</div><div class="line">----&gt; 1 duigou.encode(&apos;gbk&apos;)</div><div class="line"></div><div class="line">UnicodeEncodeError: &apos;gbk&apos; codec can&apos;t encode character &apos;\u2713&apos; in position 0: illegal multibyte sequence</div></pre></td></tr></table></figure>
+<p>我x，怎么出错了？ 不会啊，思路没有错了，将Unicode的字符编码为字节呢。 其实，不出错才不正常呢，因为GBK字符集中没有这个字符。</p>
+<p>如果我们知道了一个字符的Unicode编号，怎么将它变为字符呢？好问题。</p>
+<p>比如有一个<a href="https://unicode-table.com/cn/2764/" target="_blank" rel="external">粗实心心</a>。它的编号（码位）是10084，我们使用下面代码将它变为一个字符（注意：GBK中没有这个字符）。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fj0wgt7hrnj30bg0hgaas.jpg" alt="WX20170829-210900@2x"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cushixinxin = 10084 #Unicode编号</div><div class="line">chr(cushixinxin) #chr函数</div><div class="line">Out[29]: &apos;❤&apos; #输出，粗实心心</div></pre></td></tr></table></figure>
+<p>下面是上面使用到的两个函数的原型：</p>
+<ul>
+<li><p>ord(<em>c</em>)</p>
+<p>Given a string representing one Unicode character, return an integer representing the Unicode code point of that character.</p>
+</li>
+</ul>
+<ul>
+<li><p><code>chr</code>(<em>i</em>)</p>
+<p>Return the string representing a character whose Unicode code point is the integer <em>i</em>.</p>
+</li>
+</ul>
+<h2 id="3-参考资料"><a href="#3-参考资料" class="headerlink" title="3. 参考资料"></a>3. 参考资料</h2><p><a href="https://www.zhihu.com/question/19698598" target="_blank" rel="external">Python3变化</a></p>
+<p><a href="https://docs.python.org/3/howto/unicode.html#" target="_blank" rel="external">Unicode HOWTO</a></p>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.png" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/08/29/charset-encoding-4/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'AotY';
+    
+    var disqus_url = 'http://aoty.github.io/2017/08/29/charset-encoding-5/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//AotY.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

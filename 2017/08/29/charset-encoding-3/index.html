@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>编码？你需要知道的那些事：3-Python2.x为什么有乱码 | AotY&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="编码 字符集 Python," />
+  
+
+  <meta name="description" content="这是之前写的文章，因为博客地址换了，重新发布下。 这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新： 关于Python3 的编码  声明： Unicode是指字符集">
+<meta name="keywords" content="编码 字符集 Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码？你需要知道的那些事：3-Python2.x为什么有乱码">
+<meta property="og:url" content="http://aoty.github.io/2017/08/29/charset-encoding-3/index.html">
+<meta property="og:site_name" content="AotY&#39;s Blog">
+<meta property="og:description" content="这是之前写的文章，因为博客地址换了，重新发布下。 这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新： 关于Python3 的编码  声明： Unicode是指字符集">
+<meta property="og:image" content="http://i.imgur.com/tGlM482.png">
+<meta property="og:image" content="http://i.imgur.com/r2GQOlN.png">
+<meta property="og:image" content="http://i.imgur.com/zFTyEiR.png">
+<meta property="og:image" content="http://i.imgur.com/kUP3l19.png">
+<meta property="og:image" content="http://i.imgur.com/VeY1OQG.png">
+<meta property="og:image" content="http://i.imgur.com/AGUbFqq.png">
+<meta property="og:image" content="http://i.imgur.com/ttdQkQh.png">
+<meta property="og:updated_time" content="2017-08-29T11:05:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编码？你需要知道的那些事：3-Python2.x为什么有乱码">
+<meta name="twitter:description" content="这是之前写的文章，因为博客地址换了，重新发布下。 这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。  编码？你需要知道的那些事：1-了解字符集 编码？你需要知道的那些事：2-明白编码 编码？你需要知道的那些事：3-Python2.x为什么有乱码 编码？你需要知道的那些事：4-Java为什么有乱码 更新： 关于Python3 的编码  声明： Unicode是指字符集">
+<meta name="twitter:image" content="http://i.imgur.com/tGlM482.png">
+
+  
+
+  
+    <link rel="icon" href="https://ws3.sinaimg.cn/large/006tNc79ly1fiztujvadej308e08emyz.jpg">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts List</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-从硬盘到内存"><span class="toc-text">1. 从硬盘到内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#读取一般文件（相对Python源代码文件来说的）"><span class="toc-text">读取一般文件（相对Python源代码文件来说的）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python源代码文件"><span class="toc-text">Python源代码文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-内存中，Python怎样进行操作的？"><span class="toc-text">2. 内存中，Python怎样进行操作的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-One-more-thing"><span class="toc-text">3. One more thing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-关于print输出问题"><span class="toc-text">4. 关于print输出问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-参考资料"><span class="toc-text">5. 参考资料</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-charset-encoding-3" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">编码？你需要知道的那些事：3-Python2.x为什么有乱码</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.08.29</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>AotY</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://aoty.github.io/2017/08/29/charset-encoding-3/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <blockquote>
+<p>这是之前写的文章，因为博客地址换了，重新发布下。</p>
+<p>这个系列目前一共四篇文章，之后可能会增加Python3.x关于编码方面的内容。</p>
+</blockquote>
+<p><a href="/2017/08/28/charset-encoding-1/">编码？你需要知道的那些事：1-了解字符集</a></p>
+<p><a href="/2017/08/29/charset-encoding-2/">编码？你需要知道的那些事：2-明白编码</a></p>
+<p><a href="/2017/08/29/charset-encoding-3/">编码？你需要知道的那些事：3-Python2.x为什么有乱码</a></p>
+<p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
+<p><strong>更新：</strong></p>
+<p><a href="/2017/08/29/charset-encoding-5/">关于Python3 的编码</a></p>
+<blockquote>
+<p><strong>声明： Unicode是指字符集，不是编码</strong></p>
+</blockquote>
+<p>之前两篇文章，我们说到了字符集和编码，如果你还不知道字符集和编码的区别，可以先去看看前两篇文章或者Wiki下。</p>
+<p>接下来的两篇文章我们准备讨论了Python下和Java下的乱码问题，本文我们先讨论Python平台(注意，以下提到的Python均为2.X版本)，如果你只准备看Java的，那我加油写。哈哈！</p>
+<p>让我们回到问题上来，为什么会有乱码呢？ 不知道你发现没有，通常乱码都是出现了我们要进行I/O转换时（比如，从硬盘到内存）。下面我们就来讨论下这几个容易出现乱码的地方。</p>
+<h2 id="1-从硬盘到内存"><a href="#1-从硬盘到内存" class="headerlink" title="1. 从硬盘到内存"></a>1. 从硬盘到内存</h2><h3 id="读取一般文件（相对Python源代码文件来说的）"><a href="#读取一般文件（相对Python源代码文件来说的）" class="headerlink" title="读取一般文件（相对Python源代码文件来说的）"></a>读取一般文件（相对Python源代码文件来说的）</h3><p>首先，我们看看系统默认的文件编码（<strong>声明使用的是Python2.x版本，3.x默认是’utf-8’</strong>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#打开iPython，输入命令</div><div class="line">In [1]: import sys</div><div class="line">In [2]: sys.getdefaultencoding()</div><div class="line">Out[2]: &apos;ascii&apos;</div></pre></td></tr></table></figure>
+<p>太可怕了，上次不是说Windows中文的默认编码是GBK嘛，骗人，骗人！先别急，我们慢慢说。我们从记事本说起。打开记事本，输入’A’,然后保存。</p>
+<p><img src="http://i.imgur.com/tGlM482.png" alt=""></p>
+<p>对，它现在使用ASCII编码(看起来是)，保存的。在Python下读取也没有问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [3]: f = open(&apos;Demo.txt&apos;)</div><div class="line">In [4]: s = f.read()</div><div class="line">In [5]: print s</div><div class="line">A </div><div class="line">#正常显示</div></pre></td></tr></table></figure>
+<p>我们继续，这次我们再输入’中’字，如果真是ASCII编码的话，应该是不能正常显示的。</p>
+<p><img src="http://i.imgur.com/r2GQOlN.png" alt=""></p>
+<p>but , 它还是正常显示的。（得，这下招牌砸了…），不管了。我们再用Python读取看看（是不是它也像记事本一样神奇）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">In [3]: f = open(&apos;Demo.txt&apos;)</div><div class="line">In [4]: s = f.read()</div><div class="line">In [5]: print s</div><div class="line">A ��</div></pre></td></tr></table></figure>
+<p>终于看见乱码了，不对啊，怎么一个正常一个乱码呢？不怕，我们再用Notepad++打开看看。</p>
+<p><img src="http://i.imgur.com/zFTyEiR.png" alt=""></p>
+<p>啊啊，不干啦，又是看不懂的。啥子情况呢？这时我们点击Encoding，选择GB2321（GBK的弟弟，他们的关系可以看看前两篇文章或者网上查查，因为Notepad++上没有GBK选项），这时奇迹出现了，抱头痛哭啊。</p>
+<p><img src="http://i.imgur.com/kUP3l19.png" alt=""></p>
+<p>难道真是GBK编码吗？ 我们用Python验证一下。（这里使用codes包，下文还会提到）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [6]: import codecs #可以指定编码</div><div class="line">In [7]: f = codecs.open(&apos;Demo.txt&apos;, encoding=&apos;GBK&apos;)  #以GBK方式打开，用GB2312也行，为什么呢？不告诉你^_^</div><div class="line">In [8]: s = f.read()</div><div class="line">In [9]: print s</div><div class="line">A 中</div></pre></td></tr></table></figure>
+<p>现在知道了吧？ <strong>其实Windows（中文）默认的文件编码是GBK的（</strong>将到Java时也会验证这一点）。还记得我们讨论GBK时，知道它是兼容ASCII的（反正只是加了汉字进去）。所以它可以输入和显示中文（英文正常显示是必须的，世界上几乎所有的编码都能正常显示英文，我们可不一样…）。</p>
+<p>最后，不要被它的外表骗了，我想Python去获取系统文件编码的时候可能就被骗了，当我加入中文时，却还用ASCII编码方式去读取文件，只能是乱码了。（其实，这里说的有点不对，Python2.x默认的编码就是’ASCII’，哈哈）</p>
+<p>文件保存时用的什么编码，我们最好也用什么编码去读取。（为什么不说必须呢，因为有些编码是兼容的，比如UTF-8就兼容ASCII呢）。用记事本也没什么不可以，只要编码指定正确就好了。</p>
+<h3 id="Python源代码文件"><a href="#Python源代码文件" class="headerlink" title="Python源代码文件"></a>Python源代码文件</h3><p>Python源代码文件一般不用我们读取，主要是由Python解释器来读取执行。所以如果它读出来是乱码，咋们的程序就别想运行了。</p>
+<p>还记得这句话吗，就是告诉解释器，读取该文件时请用UTF-8。（如果你文件全是字母的话倒不用，可我们不是还要写中文吗…），如果不声明，解释器将按照默认的编码读取（Python2.x是ASCII, Python3是UTF-8)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># -*- coding: utf-8 -*-</div></pre></td></tr></table></figure>
+<p>上面说的是读取文件时要注意的，同样，从内存中写入文件也要注意编码指定要一致（一致最好）。不能说内存中是’UTF-8’或在’UTF-16’编码的，你却用ASCII去保存，那就有你好看了。（如果在内存中编码为’UTF-16’，一般也是用’UTF-8’保存，不过保存前先做转换，UTF-8常用些）。</p>
+<h2 id="2-内存中，Python怎样进行操作的？"><a href="#2-内存中，Python怎样进行操作的？" class="headerlink" title="2. 内存中，Python怎样进行操作的？"></a>2. 内存中，Python怎样进行操作的？</h2><p>如果用Python2.x读取多个文件，有’UTF-8’、’GBk’编码，我们要将这些文件中的内容合并，然后保存的一个新文件中，那应该怎么做呢？不管， 先将他们读进来再说。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">In [10]: f1 = open(&apos;Demo1.txt&apos;) #f1中只有一个&apos;A&apos; ，记事本默认保存方式</div><div class="line"></div><div class="line">In [11]: f2 = open(&apos;Demo2.txt&apos;) #f2中有一个&apos;A&apos; 和&apos;中&apos; ，记事本默认保存方式</div><div class="line"></div><div class="line">In [12]: f3 = open(&apos;Demo3.txt&apos;) #f3中有一个&apos;A&apos; 和&apos;中&apos; ，选择&apos;UTF-8&apos;保存</div><div class="line"></div><div class="line">In [13]: s1 = f1.read()</div><div class="line"></div><div class="line">In [14]: s2 = f2.read()</div><div class="line"></div><div class="line">In [15]: s3 = f3.read()</div></pre></td></tr></table></figure>
+<p>现在要将他们合并，然后保存。不过，等等，就这样将他们连接起来，他们的编码方式不兼容啊！保存时我们应该选择什么编码保存呢？这是个问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [16]: f4 = open(&apos;Demo4.txt&apos;, &apos;w&apos;) #打开新文件 </div><div class="line"></div><div class="line">In [17]: f4.write(s1 + s2 + s3) #保存</div><div class="line"></div><div class="line">In [18]: f4.close()</div></pre></td></tr></table></figure>
+<p>这时打开文件（就用记事本，吓我一跳，这是什么啊！可以看到前两个文件保存正确，但是第三文件的内容不能正常显示）。</p>
+<p><img src="http://i.imgur.com/VeY1OQG.png" alt=""></p>
+<p>我们知道的是，记事本再神奇也没有这么神奇，知道前面用GBK，后面用UTF-8…<br>所以保存之前，我们可以将他们转换为同一种编码再保存。我们先看看Python2中str与unicode的关系。（str是编码后的；Unicode是未经编码的，其实它就是字符集）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(Python2.x str与unicode的关系)</div><div class="line"></div><div class="line">&lt;type &apos;basestring&apos;&gt;</div><div class="line">   |</div><div class="line">   +--&lt;type &apos;str&apos;&gt;</div><div class="line">   |</div><div class="line">   +--&lt;type &apos;unicode&apos;&gt;</div></pre></td></tr></table></figure>
+<p>原来str,和unicode都是basestring的孩子，由于Python的出现比Unicode字符集出现早，是后来才支持Unicode的。<strong>这里要知道的是，Unicode不是一种编码噢，一个Unicode字符在内存中的值就是在Unicode字符集编号的值</strong>，（<strong>这里还要说一下的就是，记事本中的unicode保存实际是按照UTF-16编码保存的，因为当初Unicode字符集使用16位，而UTF-16也是最小使用16位，所以容易搞错，要记住，Unicode仍然不是指编码</strong>）。这里我们就要使用decode方法，意思就是解码，我们先看看decode是什么意思。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">s.decode(encoding)  #将str解码为Unicode</div><div class="line">&lt;type &apos;str&apos;&gt; to &lt;type &apos;unicode&apos;&gt;</div><div class="line"></div><div class="line">u.encode(encoding) #将Unicode编码str</div><div class="line">&lt;type &apos;unicode&apos;&gt; to &lt;type &apos;str&apos;&gt;</div></pre></td></tr></table></figure>
+<p><strong>这样是不是要方便些呢， 操作是先将str解码为Unicode的，进行操作，待操作完成，我们就可以按照我们想要的编码方式保存啦！（不过，最好还是选择UTF-8保存）</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">In [19]: s1 = s1.decode(&apos;GBK&apos;) #解码 ，这里用GBK, 虽然只有&apos;A&apos;</div><div class="line">Out[19]: u&apos;A&apos;</div><div class="line"></div><div class="line">In [20]: s1 = s2.decode(&apos;GBK&apos;)  #解码</div><div class="line">Out[20]: u&apos;A \u4e2d&apos;</div><div class="line"></div><div class="line">In [21]: s3 = s3.decode(&apos;UTF-8&apos;) #解码</div><div class="line">Out[21]: u&apos;\ufeffA \u4e2d\n&apos;</div><div class="line"></div><div class="line">In [22]: s4 = s1 + s2 + s3  #连接 , 现在s4也为unicode</div><div class="line"></div><div class="line">In [23]: s4 = s4.encode(&apos;UTF-8&apos;) #用&apos;UTF-8&apos;编码</div><div class="line"></div><div class="line">In [24]: f4 = open(&apos;Demo4.txt&apos;, &apos;w&apos;) #打开新文件 </div><div class="line"></div><div class="line">In [25]: f4.write(s4) #保存编码后的字符串</div><div class="line"></div><div class="line">In [26]: f4.close()</div></pre></td></tr></table></figure>
+<p>下面就是见证奇迹的时刻： （你没有看错，正常显示，最后保存用的是UTF-8）。</p>
+<p>你可能说，要不要这么麻烦啊，其实是可以滴，Python提供了codecs,方便我们进行Unicode与str之间的编码和解码操作，下面来演示上面的例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">In [27]: s1 = codecs.open(&apos;Demo1.txt&apos;, encoding=&apos;GBK&apos;).read()</div><div class="line"></div><div class="line">In [28]: s2 = codecs.open(&apos;Demo2.txt&apos;, encoding=&apos;GBK&apos;).read()</div><div class="line"></div><div class="line">In [29]: s3 = codecs.open(&apos;Demo3.txt&apos;, encoding=&apos;UTF-8&apos;).read()</div><div class="line"></div><div class="line">In [30]: f7 = codecs.open(&apos;Demo7.txt&apos;, &apos;w&apos;, encoding=&apos;UTF-8&apos;)</div><div class="line"></div><div class="line">In [31]: f7.write(s1+s2+s3)</div><div class="line"></div><div class="line">In [32]: f7.close() #结果和上面一样，正常显示，最后保存用的是UTF-8</div></pre></td></tr></table></figure>
+<h2 id="3-One-more-thing"><a href="#3-One-more-thing" class="headerlink" title="3. One more thing"></a>3. One more thing</h2><p><strong>要在Python避免乱码，我们需要记住：</strong></p>
+<ul>
+<li><strong>Decode early</strong> #可以自己decode,也可以使用codes.open</li>
+<li><strong>Unicode everywhere</strong> #操作时，一律unicode</li>
+<li><strong>Encode late</strong> #要保存是，记得编码，可以用encode，或者codes.open</li>
+</ul>
+<p>所以，最好的情况还是用文件保存的编码打开（因为不确定是否为UTF-8编码的），然后解码为Unicode，进行操作，然后保存。（下面我以UTF-8文件为例子，有图有真相^_^）。</p>
+<p><img src="http://i.imgur.com/AGUbFqq.png" alt=""></p>
+<h2 id="4-关于print输出问题"><a href="#4-关于print输出问题" class="headerlink" title="4. 关于print输出问题"></a>4. 关于print输出问题</h2><p>关于为什么是Unicode，我们用print输出时我们可以看见正确的字符呢？按理来说我们应该先对其进行编码才行呢？其实，在调用print输出时，Python已经按照UTF-8对其进行编码了。我们来验证一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">In [33]: import sys</div><div class="line"></div><div class="line">In [34]: sys.stdout.encoding</div><div class="line"></div><div class="line">Out[34]: &apos;UTF-8&apos;</div><div class="line"></div><div class="line">In [35]: print u&apos;\u2713&apos; #Python帮我们编码了</div><div class="line">✓</div></pre></td></tr></table></figure>
+<p>最后在附上一张图（证明上面使用的是Unicode的编号，可以在<a href="http://unicode-table.com/cn/#control-character" target="_blank" rel="external">这里</a>查找）：</p>
+<p><img src="http://i.imgur.com/ttdQkQh.png" alt=""></p>
+<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/25/248213.html" target="_blank" rel="external">Java中的字符集编码入门（五）Java代码中的字符编码转换Part 1</a><br><a href="http://farmdev.com/talks/unicode/" target="_blank" rel="external">Unicode In Python, Completely Demystified</a><br><a href="http://stackoverflow.com/questions/11339955/python-string-encode-decode" target="_blank" rel="external">python string encode / decode</a><br><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">Python字符串和编码</a><br><a href="http://stackoverflow.com/questions/2596714/why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii" target="_blank" rel="external">why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii</a></p>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.png" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/08/29/charset-encoding-2/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2017/08/29/charset-encoding-4/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">Close</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'AotY';
+    
+    var disqus_url = 'http://aoty.github.io/2017/08/29/charset-encoding-3/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//AotY.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
