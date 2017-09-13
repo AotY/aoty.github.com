@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://aoty.github.io/"/>
-  <updated>2017-09-13T05:23:58.000Z</updated>
+  <updated>2017-09-13T05:34:40.000Z</updated>
   <id>http://aoty.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://aoty.github.io/2017/09/12/Linear-Algebra-1/"/>
     <id>http://aoty.github.io/2017/09/12/Linear-Algebra-1/</id>
     <published>2017-09-12T11:24:33.000Z</published>
-    <updated>2017-09-13T05:23:58.000Z</updated>
+    <updated>2017-09-13T05:34:40.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="linear-algebra-in-python-1"><a class="markdownIt-Anchor" href="#linear-algebra-in-python-1"></a> Linear Algebra in Python 1</h2>
 <blockquote>
@@ -32,7 +32,7 @@
 <li>Matrix form</li>
 </ul>
 </blockquote>
-<h2 id="row-picture"><a class="markdownIt-Anchor" href="#row-picture"></a> Row picture</h2>
+<h2 id="1-row-picture行向量视角"><a class="markdownIt-Anchor" href="#1-row-picture行向量视角"></a> 1. Row Picture（行向量视角）</h2>
 <p>对于下面方程组，两个方程两个未知数。</p>
 \begin{align*} 
 2x - y &=  0 \\ 
@@ -43,7 +43,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">%matplotlib</div><div class="line">import matplotlib.pyplot as plt</div><div class="line">import numpy as np</div><div class="line"></div><div class="line">x1 = np.linspace(-3, 3, 50)</div><div class="line">y1 = 2 * x1</div><div class="line">x2 = x1</div><div class="line">y2 = (3 + x2)/2</div><div class="line">fig, ax = plt.subplots()</div><div class="line">plt.plot(x1, y1,&apos;-&apos;, color=&apos;C1&apos;)</div><div class="line">plt.plot(x2, y2, &apos;-&apos;, color=&apos;C1&apos;)</div><div class="line">plt.text(1, 2, &apos;(1, 2)&apos;, color=&apos;C2&apos;)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjh90m9yo1j30ae070jrh.jpg" alt="2F1D8953-329F-41FB-A619-6407A339581D"></p>
 <p>这里可以看出两条直线的交点为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">(1, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathrm">2</span><span class="mclose">)</span></span></span></span>点，这里正是满足方程的解：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x=1, y=2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">2</span></span></span></span>。</p>
-<h2 id="column-picture"><a class="markdownIt-Anchor" href="#column-picture"></a> Column picture</h2>
+<h2 id="2-column-picture列向量视角"><a class="markdownIt-Anchor" href="#2-column-picture列向量视角"></a> 2. Column Picture（列向量视角）</h2>
 <p>如果我们用列向量（Column）形式表示方程组的话可以写成下面形式：</p>
 \begin{align*}
 x
@@ -107,7 +107,7 @@ x \vec{v1} + y\vec{v2}=
 \end{align*}
 
 <p>成立，我们可以想象的是，如果<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>可以<strong>表示平面内的所有向量</strong>（相互独立），那么它们一定可以表示<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mrow><mn>0</mn></mrow></mtd></mtr><mtr><mtd><mrow><mn>3</mn></mrow></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}0      \\ 3 \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="base textstyle uncramped"><span class="minner textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist"><span style="top:-0.6099999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">0</span></span></span><span style="top:0.5900000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span>  这个向量。</p>
-<h2 id="matrix-form"><a class="markdownIt-Anchor" href="#matrix-form"></a> Matrix form</h2>
+<h2 id="3-matrix-form矩阵表示"><a class="markdownIt-Anchor" href="#3-matrix-form矩阵表示"></a> 3. Matrix form（矩阵表示）</h2>
 <p>上面的方程组：</p>
 \begin{align*} 
 2x - y &=  0 \\ 
@@ -202,7 +202,7 @@ z
 <p>or do the linear combinations of the columns fill 3-D space ？（换句话说，A中的Columns通过线性组合是否能够填充满整个三维空间？</p>
 <p>下一节将通过elimination（消元法）来解决这个问题。</p>
 </blockquote>
-<h2 id="python求解方程"><a class="markdownIt-Anchor" href="#python求解方程"></a> Python求解方程</h2>
+<h2 id="4-python求解方程"><a class="markdownIt-Anchor" href="#4-python求解方程"></a> 4. Python求解方程</h2>
 <p>这里使用的是<a href="http://docs.sympy.org/latest/index.html" target="_blank" rel="external">sympy</a>包</p>
 <ul>
 <li>
@@ -225,8 +225,7 @@ z
   \end{align*}
 
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from sympy import solve, symbols</div><div class="line">x, y, z = symbols(&apos;x y z&apos;)</div><div class="line">sol = solve([2*x - y, -x + 2*y - z + 1, -3*y + 4*z - 4], dict=True)</div><div class="line">print(sol)</div><div class="line"># output: [&#123;y: 0, x: 0, z: 1&#125;]</div></pre></td></tr></table></figure>
-<p>​</p>
-<h2 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h2>
+<h2 id="5-参考文献"><a class="markdownIt-Anchor" href="#5-参考文献"></a> 5. 参考文献</h2>
 <p><a href="http://open.163.com/movie/2010/11/7/3/M6V0BQC4M_M6V29E773.html" target="_blank" rel="external">方程组的几何解释</a></p>
 <p><a href="https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html" target="_blank" rel="external">mplot3d</a></p>
 <p><a href="http://docs.sympy.org/latest/modules/solvers/solvers.html" target="_blank" rel="external">Solvers</a></p>
