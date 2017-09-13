@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Linear Algebra in Python 1 — 方程组的几何解释 | AotY&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="线性代数 方程组," />
+  
+
+  <meta name="description" content="Linear Algebra in Python 1  下面是四个知识点，其中Column Picture尤其重要。  n linear equations, n unknowns. Row picture Column picture Matrix form    Row picture 对于下面方程组，两个方程两个未知数。 \begin{align*}  2x - y &amp;=  0 \\  -">
+<meta name="keywords" content="线性代数 方程组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Algebra in Python 1 — 方程组的几何解释">
+<meta property="og:url" content="http://aoty.github.io/2017/09/12/Linear-Algebra-1/index.html">
+<meta property="og:site_name" content="AotY&#39;s Blog">
+<meta property="og:description" content="Linear Algebra in Python 1  下面是四个知识点，其中Column Picture尤其重要。  n linear equations, n unknowns. Row picture Column picture Matrix form    Row picture 对于下面方程组，两个方程两个未知数。 \begin{align*}  2x - y &amp;=  0 \\  -">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjh90m9yo1j30ae070jrh.jpg">
+<meta property="og:image" content="https://ws4.sinaimg.cn/large/006tKfTcly1fjhq27l62bj30ae070mx7.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1fjhq34defnj30ae070aa5.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1fjhq7j3xylj30ae070dfx.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1fjhrny1l1kj309w06mmxy.jpg">
+<meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjhsmu5e8tj309w06m74s.jpg">
+<meta property="og:updated_time" content="2017-09-13T05:23:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linear Algebra in Python 1 — 方程组的几何解释">
+<meta name="twitter:description" content="Linear Algebra in Python 1  下面是四个知识点，其中Column Picture尤其重要。  n linear equations, n unknowns. Row picture Column picture Matrix form    Row picture 对于下面方程组，两个方程两个未知数。 \begin{align*}  2x - y &amp;=  0 \\  -">
+<meta name="twitter:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjh90m9yo1j30ae070jrh.jpg">
+
+  
+
+  
+    <link rel="icon" href="https://ws3.sinaimg.cn/large/006tNc79ly1fiztujvadej308e08emyz.jpg">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+
+
+  
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linear-algebra-in-python-1"><span class="toc-text"> Linear Algebra in Python 1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#row-picture"><span class="toc-text"> Row picture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#column-picture"><span class="toc-text"> Column picture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#matrix-form"><span class="toc-text"> Matrix form</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python求解方程"><span class="toc-text"> Python求解方程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-text"> 参考文献</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Linear-Algebra-1" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Linear Algebra in Python 1 — 方程组的几何解释</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.09.12</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>AotY</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://aoty.github.io/2017/09/12/Linear-Algebra-1/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="linear-algebra-in-python-1"><a class="markdownIt-Anchor" href="#linear-algebra-in-python-1"></a> Linear Algebra in Python 1</h2>
+<blockquote>
+<p>下面是四个知识点，其中Column Picture尤其重要。</p>
+<ul>
+<li>n linear equations, n unknowns.</li>
+<li>Row picture</li>
+<li><strong>Column picture</strong></li>
+<li>Matrix form</li>
+</ul>
+</blockquote>
+<h2 id="row-picture"><a class="markdownIt-Anchor" href="#row-picture"></a> Row picture</h2>
+<p>对于下面方程组，两个方程两个未知数。</p>
+\begin{align*} 
+2x - y &=  0 \\ 
+-x + 2y &=  3
+\end{align*}
+
+<p>如果我们把这两个方程看成是平面直角坐标系的两条直线的话（看成Row Picture），那么它们的图形如下（这里使用IPython Notebook）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">%matplotlib</div><div class="line">import matplotlib.pyplot as plt</div><div class="line">import numpy as np</div><div class="line"></div><div class="line">x1 = np.linspace(-3, 3, 50)</div><div class="line">y1 = 2 * x1</div><div class="line">x2 = x1</div><div class="line">y2 = (3 + x2)/2</div><div class="line">fig, ax = plt.subplots()</div><div class="line">plt.plot(x1, y1,&apos;-&apos;, color=&apos;C1&apos;)</div><div class="line">plt.plot(x2, y2, &apos;-&apos;, color=&apos;C1&apos;)</div><div class="line">plt.text(1, 2, &apos;(1, 2)&apos;, color=&apos;C2&apos;)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjh90m9yo1j30ae070jrh.jpg" alt="2F1D8953-329F-41FB-A619-6407A339581D"></p>
+<p>这里可以看出两条直线的交点为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">(1, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathrm">2</span><span class="mclose">)</span></span></span></span>点，这里正是满足方程的解：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x=1, y=2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">2</span></span></span></span>。</p>
+<h2 id="column-picture"><a class="markdownIt-Anchor" href="#column-picture"></a> Column picture</h2>
+<p>如果我们用列向量（Column）形式表示方程组的话可以写成下面形式：</p>
+\begin{align*}
+x
+\begin{bmatrix}
+    2      \\
+    -1
+\end{bmatrix}
++ 
+y
+\begin{bmatrix}
+    -1      \\
+    2
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+    3
+\end{bmatrix}
+\end{align*}
+
+<p>这里有一句经典的话：</p>
+<blockquote>
+<p>Linear Algebra is the linear combination of Columns.</p>
+<p>线性代数就是列向量的各种（线性）组合。</p>
+</blockquote>
+<p>接下来我们在坐标系中画出两个向量(分别记为$\vec{v1} 和\vec{v2} $)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">vecs = np.array([[0, 0, -1, 2], [0, 0, 2, -1]])</div><div class="line">X, Y, U, V = zip(*vecs)</div><div class="line"></div><div class="line">plt.figure()</div><div class="line">ax = plt.gca()</div><div class="line">ax.quiver(X, Y, U, V, angles=&apos;xy&apos;, scale_units=&apos;xy&apos;, scale=1)</div><div class="line"></div><div class="line">ax.text(-1, 2, &quot;v1&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">ax.text(2, -1, &quot;v2&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">            </div><div class="line">ax.set_xticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_yticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_xlim([vecs.min(), vecs.max() + 1])</div><div class="line">ax.set_ylim([vecs.min(), vecs.max() + 1])</div><div class="line"></div><div class="line">plt.grid(b=True, which=&apos;major&apos;) #&lt;-- plot grid lines</div><div class="line">plt.draw()</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fjhq27l62bj30ae070mx7.jpg" alt="44037E25-B108-40C0-A684-141A1F054314"></p>
+<p>如果我们对这两个向量进行向量间的操作（向量加法，因为我们上面已经知道了<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x=1, y= 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">2</span></span></span></span>是方程的解），会得到下面的结果：</p>
+\begin{align*}
+1
+\begin{bmatrix}
+    2      \\
+    -1
+\end{bmatrix}
++ 
+2
+\begin{bmatrix}
+    -1      \\
+    2
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+    3
+\end{bmatrix}
+\end{align*}
+
+<p>在坐标系中表示的话即是：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover><mo>+</mo><mn>2</mn><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1} + 2\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:1.01121em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">2</span><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">vecs = np.array([[0, 0, -1, 2], [0, 0, 2, -1], [2, -1, -2, 4]])</div><div class="line">X, Y, U, V = zip(*vecs)</div><div class="line"></div><div class="line">plt.figure()</div><div class="line">ax = plt.gca()</div><div class="line">ax.quiver(X, Y, U, V, angles=&apos;xy&apos;, scale_units=&apos;xy&apos;, scale=1)</div><div class="line"></div><div class="line">ax.text(-1, 2, &quot;v1&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">ax.text(2, -1, &quot;v2&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line"></div><div class="line">ax.text(0, 3, &quot;2v1 + v2&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">            </div><div class="line">ax.set_xticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_yticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_xlim([vecs.min(), vecs.max() + 1])</div><div class="line">ax.set_ylim([vecs.min(), vecs.max() + 1])</div><div class="line"></div><div class="line">plt.grid(b=True, which=&apos;major&apos;) #&lt;-- plot grid lines</div><div class="line">plt.draw()</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fjhq34defnj30ae070aa5.jpg" alt="AAC99642-AEE1-403A-ABD4-02EFC5BE5B64"></p>
+<p>当然，上面我们是在知道了方程的解的情况下用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover><mo>+</mo><mn>2</mn><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1} + 2\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:1.01121em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">2</span><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，然后就可以得到结果。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fjhq7j3xylj30ae070dfx.jpg" alt="312989F6-9515-4771-86CD-2D680A64E33A"></p>
+<p>如果我们还不知道解的话，我们的题目就变成了寻找各种<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span>组合，使</p>
+\begin{align*}
+x \vec{v1} + y\vec{v2}=
+\begin{bmatrix}
+    0      \\
+    3
+\end{bmatrix}
+\end{align*}
+
+<p>成立，我们可以想象的是，如果<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>可以<strong>表示平面内的所有向量</strong>（相互独立），那么它们一定可以表示<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mrow><mn>0</mn></mrow></mtd></mtr><mtr><mtd><mrow><mn>3</mn></mrow></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}0      \\ 3 \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="base textstyle uncramped"><span class="minner textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist"><span style="top:-0.6099999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">0</span></span></span><span style="top:0.5900000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span>  这个向量。</p>
+<h2 id="matrix-form"><a class="markdownIt-Anchor" href="#matrix-form"></a> Matrix form</h2>
+<p>上面的方程组：</p>
+\begin{align*} 
+2x - y &=  0 \\ 
+-x + 2y &=  3
+\end{align*}
+
+<p>如果使用矩阵（Matrix）形式来表示，可以写成我们习惯的\matrix{A} \bf{x} {=} \bf{b}形式（其中A是系数矩阵，x是未知数向量，b也是一个向量）。</p>
+\begin{align*}
+\begin{bmatrix}
+    2 & -1      \\
+    -1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+    x      \\
+   y
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+   3
+\end{bmatrix}
+\end{align*}
+
+<p>从上面我们已经知道该方程组有解，称矩阵\matrix{A} 是一个<strong>非奇异、可逆矩阵</strong>（no-singular,  invertible matrix），当然，如果方程不可解，称\matrix{A} 为一个奇异、不可逆矩阵（singular,  not invertible matrix）。</p>
+<p>下面我们考虑3个方程3个未知数的情况。</p>
+\begin{align*} 
+2x - y &=  0 \\ 
+-x + 2y - z&= -1 \\
+-3y + 4z &=  4 
+\end{align*}
+
+<p>首先，我们使用Row Picture视角，在三维坐标系中画出三个<strong>平面</strong>，它们交点即是方程组的解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">from mpl_toolkits.mplot3d import axes3d</div><div class="line"># create x,y</div><div class="line">xx, yy = np.meshgrid(range(10), range(10))</div><div class="line"></div><div class="line"># calculate corresponding z</div><div class="line">z1 = xx * 0</div><div class="line">z2 = (-1 * xx + 2 * yy + 1) * 1.0</div><div class="line">z3 = (3 * yy + 2 + 4) * 1.0 / 4.0</div><div class="line"></div><div class="line"># plot the surface</div><div class="line">plt3d = plt.figure().gca(projection=&apos;3d&apos;)</div><div class="line">plt3d.plot_surface(xx, yy, z1, color=&apos;C1&apos;)</div><div class="line">plt3d.plot_surface(xx, yy, z2, color=&apos;C2&apos;)</div><div class="line">plt3d.plot_surface(xx, yy, z3, color=&apos;C3&apos;)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fjhrny1l1kj309w06mmxy.jpg" alt="820A31ED-717F-4DBE-97F0-03196A2A2B10"></p>
+<p>不过，老实说，交点很难看出来它们的交点（知道答案在来看就会容易点，毕竟马后炮 😃 ）。将方程写为矩阵形式：</p>
+\begin{align*}
+\begin{bmatrix}
+    2 & -1 &0     \\
+    -1 & 2 & -1 \\
+    0 & -3 & 4
+\end{bmatrix}
+\begin{bmatrix}
+    x      \\
+   y 	\\
+   z
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+   -1 \\
+   4
+\end{bmatrix}
+\end{align*}
+
+<p>即：</p>
+\begin{align*}
+x
+\begin{bmatrix}
+    2  \\
+    -1 \\
+    0
+\end{bmatrix}
++
+y
+\begin{bmatrix}
+    2  \\
+    -1 \\
+    0
+\end{bmatrix}
++
+z
+\begin{bmatrix}
+    0      \\
+   -1 	\\
+   4
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+   -1 \\
+   4
+\end{bmatrix}
+\end{align*}
+
+<p>从上面的式子中我们可以清楚地看到当<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>z</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x=0, y=0, z=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span>时式子成立（因为这个方程组是故意设计的），现在我们切换到Column Pitcure视角。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">from mpl_toolkits.mplot3d import axes3d</div><div class="line">vecs = np.array([[0, 0, 0, 2, -2, 0], [0, 0, 0, -1, 2, -3], [0, 0, 0, 0, -1, 4]])</div><div class="line">X, Y, Z, U, V, W = zip(*vecs)</div><div class="line"></div><div class="line">fig = plt.figure()</div><div class="line">ax = fig.gca(projection=&apos;3d&apos;)</div><div class="line">ax.set_xlim3d(-5, 5)</div><div class="line">ax.set_ylim3d(-5, 5)</div><div class="line">ax.set_zlim3d(-5, 5)</div><div class="line">ax.quiver(X, Y, Z, U, V, W, length = 5, normalize = True)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjhsmu5e8tj309w06m74s.jpg" alt="7EFF0822-6CD0-4DB2-B2D3-33D13E6610B1"></p>
+<p>这样我们可以更清楚的看到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>z</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x=0, y=0, z=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span>时满足条件。</p>
+<p>上面我们举了的例子是有解的情况，那么</p>
+<blockquote>
+<p>Can I save Ax=b for every b? （对于每一个b，方程是否都有解？）</p>
+<p>or do the linear combinations of the columns fill 3-D space ？（换句话说，A中的Columns通过线性组合是否能够填充满整个三维空间？</p>
+<p>下一节将通过elimination（消元法）来解决这个问题。</p>
+</blockquote>
+<h2 id="python求解方程"><a class="markdownIt-Anchor" href="#python求解方程"></a> Python求解方程</h2>
+<p>这里使用的是<a href="http://docs.sympy.org/latest/index.html" target="_blank" rel="external">sympy</a>包</p>
+<ul>
+<li>
+<p>方程一</p>
+\begin{align*} 
+  2x - y &=  0 \\
+  -x + 2y &=  3
+  \end{align*}
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from sympy import solve, symbols</div><div class="line">x, y = symbols(&apos;x y&apos;)</div><div class="line">sol = solve([2*x - y, -x + 2*y - 3], dict=True)</div><div class="line">print(sol)</div><div class="line"># ouput: [&#123;y: 2, x: 1&#125;]</div></pre></td></tr></table></figure>
+</li>
+<li>
+<p>方程二</p>
+</li>
+</ul>
+  \begin{align*} 
+  2x - y &=  0 \\ 
+  -x + 2y - z&= -1 \\
+  -3y + 4z &=  4 
+  \end{align*}
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from sympy import solve, symbols</div><div class="line">x, y, z = symbols(&apos;x y z&apos;)</div><div class="line">sol = solve([2*x - y, -x + 2*y - z + 1, -3*y + 4*z - 4], dict=True)</div><div class="line">print(sol)</div><div class="line"># output: [&#123;y: 0, x: 0, z: 1&#125;]</div></pre></td></tr></table></figure>
+<p>​</p>
+<h2 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h2>
+<p><a href="http://open.163.com/movie/2010/11/7/3/M6V0BQC4M_M6V29E773.html" target="_blank" rel="external">方程组的几何解释</a></p>
+<p><a href="https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html" target="_blank" rel="external">mplot3d</a></p>
+<p><a href="http://docs.sympy.org/latest/modules/solvers/solvers.html" target="_blank" rel="external">Solvers</a></p>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.png" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/08/29/charset-encoding-5/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'AotY';
+    
+    var disqus_url = 'http://aoty.github.io/2017/09/12/Linear-Algebra-1/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//AotY.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

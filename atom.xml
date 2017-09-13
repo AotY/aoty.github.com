@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://aoty.github.io/"/>
-  <updated>2017-08-29T13:27:23.000Z</updated>
+  <updated>2017-09-13T05:23:58.000Z</updated>
   <id>http://aoty.github.io/</id>
   
   <author>
@@ -14,6 +14,235 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linear Algebra in Python 1 — 方程组的几何解释</title>
+    <link href="http://aoty.github.io/2017/09/12/Linear-Algebra-1/"/>
+    <id>http://aoty.github.io/2017/09/12/Linear-Algebra-1/</id>
+    <published>2017-09-12T11:24:33.000Z</published>
+    <updated>2017-09-13T05:23:58.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="linear-algebra-in-python-1"><a class="markdownIt-Anchor" href="#linear-algebra-in-python-1"></a> Linear Algebra in Python 1</h2>
+<blockquote>
+<p>下面是四个知识点，其中Column Picture尤其重要。</p>
+<ul>
+<li>n linear equations, n unknowns.</li>
+<li>Row picture</li>
+<li><strong>Column picture</strong></li>
+<li>Matrix form</li>
+</ul>
+</blockquote>
+<h2 id="row-picture"><a class="markdownIt-Anchor" href="#row-picture"></a> Row picture</h2>
+<p>对于下面方程组，两个方程两个未知数。</p>
+\begin{align*} 
+2x - y &=  0 \\ 
+-x + 2y &=  3
+\end{align*}
+
+<p>如果我们把这两个方程看成是平面直角坐标系的两条直线的话（看成Row Picture），那么它们的图形如下（这里使用IPython Notebook）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">%matplotlib</div><div class="line">import matplotlib.pyplot as plt</div><div class="line">import numpy as np</div><div class="line"></div><div class="line">x1 = np.linspace(-3, 3, 50)</div><div class="line">y1 = 2 * x1</div><div class="line">x2 = x1</div><div class="line">y2 = (3 + x2)/2</div><div class="line">fig, ax = plt.subplots()</div><div class="line">plt.plot(x1, y1,&apos;-&apos;, color=&apos;C1&apos;)</div><div class="line">plt.plot(x2, y2, &apos;-&apos;, color=&apos;C1&apos;)</div><div class="line">plt.text(1, 2, &apos;(1, 2)&apos;, color=&apos;C2&apos;)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjh90m9yo1j30ae070jrh.jpg" alt="2F1D8953-329F-41FB-A619-6407A339581D"></p>
+<p>这里可以看出两条直线的交点为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">(1, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mopen">(</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathrm">2</span><span class="mclose">)</span></span></span></span>点，这里正是满足方程的解：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x=1, y=2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">2</span></span></span></span>。</p>
+<h2 id="column-picture"><a class="markdownIt-Anchor" href="#column-picture"></a> Column picture</h2>
+<p>如果我们用列向量（Column）形式表示方程组的话可以写成下面形式：</p>
+\begin{align*}
+x
+\begin{bmatrix}
+    2      \\
+    -1
+\end{bmatrix}
++ 
+y
+\begin{bmatrix}
+    -1      \\
+    2
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+    3
+\end{bmatrix}
+\end{align*}
+
+<p>这里有一句经典的话：</p>
+<blockquote>
+<p>Linear Algebra is the linear combination of Columns.</p>
+<p>线性代数就是列向量的各种（线性）组合。</p>
+</blockquote>
+<p>接下来我们在坐标系中画出两个向量(分别记为$\vec{v1} 和\vec{v2} $)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">vecs = np.array([[0, 0, -1, 2], [0, 0, 2, -1]])</div><div class="line">X, Y, U, V = zip(*vecs)</div><div class="line"></div><div class="line">plt.figure()</div><div class="line">ax = plt.gca()</div><div class="line">ax.quiver(X, Y, U, V, angles=&apos;xy&apos;, scale_units=&apos;xy&apos;, scale=1)</div><div class="line"></div><div class="line">ax.text(-1, 2, &quot;v1&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">ax.text(2, -1, &quot;v2&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">            </div><div class="line">ax.set_xticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_yticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_xlim([vecs.min(), vecs.max() + 1])</div><div class="line">ax.set_ylim([vecs.min(), vecs.max() + 1])</div><div class="line"></div><div class="line">plt.grid(b=True, which=&apos;major&apos;) #&lt;-- plot grid lines</div><div class="line">plt.draw()</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fjhq27l62bj30ae070mx7.jpg" alt="44037E25-B108-40C0-A684-141A1F054314"></p>
+<p>如果我们对这两个向量进行向量间的操作（向量加法，因为我们上面已经知道了<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x=1, y= 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">2</span></span></span></span>是方程的解），会得到下面的结果：</p>
+\begin{align*}
+1
+\begin{bmatrix}
+    2      \\
+    -1
+\end{bmatrix}
++ 
+2
+\begin{bmatrix}
+    -1      \\
+    2
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+    3
+\end{bmatrix}
+\end{align*}
+
+<p>在坐标系中表示的话即是：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover><mo>+</mo><mn>2</mn><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1} + 2\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:1.01121em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">2</span><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">vecs = np.array([[0, 0, -1, 2], [0, 0, 2, -1], [2, -1, -2, 4]])</div><div class="line">X, Y, U, V = zip(*vecs)</div><div class="line"></div><div class="line">plt.figure()</div><div class="line">ax = plt.gca()</div><div class="line">ax.quiver(X, Y, U, V, angles=&apos;xy&apos;, scale_units=&apos;xy&apos;, scale=1)</div><div class="line"></div><div class="line">ax.text(-1, 2, &quot;v1&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">ax.text(2, -1, &quot;v2&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line"></div><div class="line">ax.text(0, 3, &quot;2v1 + v2&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">            </div><div class="line">ax.set_xticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_yticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_xlim([vecs.min(), vecs.max() + 1])</div><div class="line">ax.set_ylim([vecs.min(), vecs.max() + 1])</div><div class="line"></div><div class="line">plt.grid(b=True, which=&apos;major&apos;) #&lt;-- plot grid lines</div><div class="line">plt.draw()</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fjhq34defnj30ae070aa5.jpg" alt="AAC99642-AEE1-403A-ABD4-02EFC5BE5B64"></p>
+<p>当然，上面我们是在知道了方程的解的情况下用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover><mo>+</mo><mn>2</mn><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1} + 2\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:1.01121em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">2</span><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>，然后就可以得到结果。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fjhq7j3xylj30ae070dfx.jpg" alt="312989F6-9515-4771-86CD-2D680A64E33A"></p>
+<p>如果我们还不知道解的话，我们的题目就变成了寻找各种<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span>组合，使</p>
+\begin{align*}
+x \vec{v1} + y\vec{v2}=
+\begin{bmatrix}
+    0      \\
+    3
+\end{bmatrix}
+\end{align*}
+
+<p>成立，我们可以想象的是，如果<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>可以<strong>表示平面内的所有向量</strong>（相互独立），那么它们一定可以表示<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mrow><mn>0</mn></mrow></mtd></mtr><mtr><mtd><mrow><mn>3</mn></mrow></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}0      \\ 3 \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="base textstyle uncramped"><span class="minner textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist"><span style="top:-0.6099999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">0</span></span></span><span style="top:0.5900000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span>  这个向量。</p>
+<h2 id="matrix-form"><a class="markdownIt-Anchor" href="#matrix-form"></a> Matrix form</h2>
+<p>上面的方程组：</p>
+\begin{align*} 
+2x - y &=  0 \\ 
+-x + 2y &=  3
+\end{align*}
+
+<p>如果使用矩阵（Matrix）形式来表示，可以写成我们习惯的\matrix{A} \bf{x} {=} \bf{b}形式（其中A是系数矩阵，x是未知数向量，b也是一个向量）。</p>
+\begin{align*}
+\begin{bmatrix}
+    2 & -1      \\
+    -1 & 2
+\end{bmatrix}
+\begin{bmatrix}
+    x      \\
+   y
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+   3
+\end{bmatrix}
+\end{align*}
+
+<p>从上面我们已经知道该方程组有解，称矩阵\matrix{A} 是一个<strong>非奇异、可逆矩阵</strong>（no-singular,  invertible matrix），当然，如果方程不可解，称\matrix{A} 为一个奇异、不可逆矩阵（singular,  not invertible matrix）。</p>
+<p>下面我们考虑3个方程3个未知数的情况。</p>
+\begin{align*} 
+2x - y &=  0 \\ 
+-x + 2y - z&= -1 \\
+-3y + 4z &=  4 
+\end{align*}
+
+<p>首先，我们使用Row Picture视角，在三维坐标系中画出三个<strong>平面</strong>，它们交点即是方程组的解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">from mpl_toolkits.mplot3d import axes3d</div><div class="line"># create x,y</div><div class="line">xx, yy = np.meshgrid(range(10), range(10))</div><div class="line"></div><div class="line"># calculate corresponding z</div><div class="line">z1 = xx * 0</div><div class="line">z2 = (-1 * xx + 2 * yy + 1) * 1.0</div><div class="line">z3 = (3 * yy + 2 + 4) * 1.0 / 4.0</div><div class="line"></div><div class="line"># plot the surface</div><div class="line">plt3d = plt.figure().gca(projection=&apos;3d&apos;)</div><div class="line">plt3d.plot_surface(xx, yy, z1, color=&apos;C1&apos;)</div><div class="line">plt3d.plot_surface(xx, yy, z2, color=&apos;C2&apos;)</div><div class="line">plt3d.plot_surface(xx, yy, z3, color=&apos;C3&apos;)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fjhrny1l1kj309w06mmxy.jpg" alt="820A31ED-717F-4DBE-97F0-03196A2A2B10"></p>
+<p>不过，老实说，交点很难看出来它们的交点（知道答案在来看就会容易点，毕竟马后炮 😃 ）。将方程写为矩阵形式：</p>
+\begin{align*}
+\begin{bmatrix}
+    2 & -1 &0     \\
+    -1 & 2 & -1 \\
+    0 & -3 & 4
+\end{bmatrix}
+\begin{bmatrix}
+    x      \\
+   y 	\\
+   z
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+   -1 \\
+   4
+\end{bmatrix}
+\end{align*}
+
+<p>即：</p>
+\begin{align*}
+x
+\begin{bmatrix}
+    2  \\
+    -1 \\
+    0
+\end{bmatrix}
++
+y
+\begin{bmatrix}
+    2  \\
+    -1 \\
+    0
+\end{bmatrix}
++
+z
+\begin{bmatrix}
+    0      \\
+   -1 	\\
+   4
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    0      \\
+   -1 \\
+   4
+\end{bmatrix}
+\end{align*}
+
+<p>从上面的式子中我们可以清楚地看到当<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>z</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x=0, y=0, z=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span>时式子成立（因为这个方程组是故意设计的），现在我们切换到Column Pitcure视角。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">from mpl_toolkits.mplot3d import axes3d</div><div class="line">vecs = np.array([[0, 0, 0, 2, -2, 0], [0, 0, 0, -1, 2, -3], [0, 0, 0, 0, -1, 4]])</div><div class="line">X, Y, Z, U, V, W = zip(*vecs)</div><div class="line"></div><div class="line">fig = plt.figure()</div><div class="line">ax = fig.gca(projection=&apos;3d&apos;)</div><div class="line">ax.set_xlim3d(-5, 5)</div><div class="line">ax.set_ylim3d(-5, 5)</div><div class="line">ax.set_zlim3d(-5, 5)</div><div class="line">ax.quiver(X, Y, Z, U, V, W, length = 5, normalize = True)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fjhsmu5e8tj309w06m74s.jpg" alt="7EFF0822-6CD0-4DB2-B2D3-33D13E6610B1"></p>
+<p>这样我们可以更清楚的看到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mi>z</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x=0, y=0, z=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">0</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.04398em;">z</span><span class="mrel">=</span><span class="mord mathrm">1</span></span></span></span>时满足条件。</p>
+<p>上面我们举了的例子是有解的情况，那么</p>
+<blockquote>
+<p>Can I save Ax=b for every b? （对于每一个b，方程是否都有解？）</p>
+<p>or do the linear combinations of the columns fill 3-D space ？（换句话说，A中的Columns通过线性组合是否能够填充满整个三维空间？</p>
+<p>下一节将通过elimination（消元法）来解决这个问题。</p>
+</blockquote>
+<h2 id="python求解方程"><a class="markdownIt-Anchor" href="#python求解方程"></a> Python求解方程</h2>
+<p>这里使用的是<a href="http://docs.sympy.org/latest/index.html" target="_blank" rel="external">sympy</a>包</p>
+<ul>
+<li>
+<p>方程一</p>
+\begin{align*} 
+  2x - y &=  0 \\
+  -x + 2y &=  3
+  \end{align*}
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from sympy import solve, symbols</div><div class="line">x, y = symbols(&apos;x y&apos;)</div><div class="line">sol = solve([2*x - y, -x + 2*y - 3], dict=True)</div><div class="line">print(sol)</div><div class="line"># ouput: [&#123;y: 2, x: 1&#125;]</div></pre></td></tr></table></figure>
+</li>
+<li>
+<p>方程二</p>
+</li>
+</ul>
+  \begin{align*} 
+  2x - y &=  0 \\ 
+  -x + 2y - z&= -1 \\
+  -3y + 4z &=  4 
+  \end{align*}
+
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from sympy import solve, symbols</div><div class="line">x, y, z = symbols(&apos;x y z&apos;)</div><div class="line">sol = solve([2*x - y, -x + 2*y - z + 1, -3*y + 4*z - 4], dict=True)</div><div class="line">print(sol)</div><div class="line"># output: [&#123;y: 0, x: 0, z: 1&#125;]</div></pre></td></tr></table></figure>
+<p>​</p>
+<h2 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h2>
+<p><a href="http://open.163.com/movie/2010/11/7/3/M6V0BQC4M_M6V29E773.html" target="_blank" rel="external">方程组的几何解释</a></p>
+<p><a href="https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html" target="_blank" rel="external">mplot3d</a></p>
+<p><a href="http://docs.sympy.org/latest/modules/solvers/solvers.html" target="_blank" rel="external">Solvers</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;linear-algebra-in-python-1&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#linear-algebra-in-python-1&quot;&gt;&lt;/a&gt; Linear Algebra in Python 1&lt;/h2&gt;
+&lt;bl
+    
+    </summary>
+    
+    
+      <category term="线性代数 方程组" scheme="http://aoty.github.io/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0-%E6%96%B9%E7%A8%8B%E7%BB%84/"/>
+    
+  </entry>
   
   <entry>
     <title>Python3 编码</title>
@@ -32,50 +261,63 @@
 <p><strong>更新</strong></p>
 <p><a href="/2017/08/29/charset-encoding-5/">Python3 编码</a></p>
 <blockquote>
-<p>The rules for translating a Unicode string into a sequence of bytes are called an <strong>encoding</strong>.<br>Unicode字符串转换成字节序列的规则被称为编码。</p>
+<p>The rules for translating a Unicode string into a sequence of bytes are called an <strong>encoding</strong>.<br>
+Unicode字符串转换成字节序列的规则被称为编码。</p>
 </blockquote>
 <p>之前的<a href="/2017/08/29/charset-encoding-3/">文章</a>里面提到过，Python2.x默认的编码是ascii（因为当初Python诞生的时候，还没有Unicode，具体的看之前<a href="/2017/08/29/charset-encoding-3/">文章</a>），这也是为什么我们讨论在Python2.x中出现乱码的情况。</p>
-<h2 id="1-默认编码变化"><a href="#1-默认编码变化" class="headerlink" title="1. 默认编码变化"></a>1. 默认编码变化</h2><p>在Python3中，默认编码变为了utf-8，我们可以进行验证。</p>
+<h2 id="1-默认编码变化"><a class="markdownIt-Anchor" href="#1-默认编码变化"></a> 1. 默认编码变化</h2>
+<p>在Python3中，默认编码变为了utf-8，我们可以进行验证。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import sys</div><div class="line">sys.getdefaultencoding()</div><div class="line">Out[2]: &apos;utf-8&apos;</div></pre></td></tr></table></figure>
 <p>这样我们在使用print函数、读取文件、保存文件时，Python3默认都会使用utf-8进行编码。</p>
 <p>下面做一个测试。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fj0vcd2olwj319u0gogpi.jpg" alt="Screen Shot 2017-08-29 at 20.30.59"><br>这是一个使用GB 18030（也是一类GBK编码标准，主要是增加了汉字数量）编码保存的文件，我们在Python中使用默认方式打开会出现什么结果呢？</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fj0vcd2olwj319u0gogpi.jpg" alt="Screen Shot 2017-08-29 at 20.30.59"><br>
+这是一个使用GB 18030（也是一类GBK编码标准，主要是增加了汉字数量）编码保存的文件，我们在Python中使用默认方式打开会出现什么结果呢？</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fj0vhswc1jj317k0saafq.jpg" alt="WX20170829-203515@2x"></p>
 <p>都不让打开，直接报错，肯定的毕竟UTF-8和GBK不兼容。正确方式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">f = open(&apos;gbk.txt&apos;, &apos;r&apos;, encoding=&apos;gbk&apos;)</div><div class="line">f.read()</div><div class="line">Out[59]: &apos;这个测试文件&apos;</div></pre></td></tr></table></figure>
 <p>看来，是和GBK说再见的时候了（尽量少用），如果都使用默认编码的话一般不会再出现乱码问题了。</p>
 <p>下面介绍utf-8编码的规则和好处。</p>
 <ol>
-<li><p>utf-8进行编码的规则：</p>
+<li>
+<p>utf-8进行编码的规则：</p>
 <ul>
 <li>如果Unicode码位（编号）&lt; 128，则由相应的字节值表示。</li>
 <li>如果Unicode码位（编号）&gt; = 128，将它变成两个，三个或四个字节的序列，其中序列的每个字节都在128到255之间。</li>
 </ul>
 </li>
-<li><p>使用utf-8进行编码的好处（半翻译）：</p>
+<li>
+<p>使用utf-8进行编码的好处（半翻译）：</p>
 <ul>
-<li><p>它可以处理任意Unicode码位（编号）。</p>
+<li>
+<p>它可以处理任意Unicode码位（编号）。</p>
 </li>
-<li><p>将一个Unicode字符串变成一个不包含嵌入零字节的字节序列。</p>
+<li>
+<p>将一个Unicode字符串变成一个不包含嵌入零字节的字节序列。</p>
 </li>
-<li><p>一串ASCII文本也是有效的UTF-8文本（具有兼容性）。</p>
+<li>
+<p>一串ASCII文本也是有效的UTF-8文本（具有兼容性）。</p>
 </li>
-<li><p>UTF-8相当紧凑，大多数常用字符可以用一个或两个字节表示（节省内存）。</p>
+<li>
+<p>UTF-8相当紧凑，大多数常用字符可以用一个或两个字节表示（节省内存）。</p>
 </li>
-<li><p>如果字节损坏或丢失，可以确定下一个UTF-8编码代码点的开始并重新同步。</p>
+<li>
+<p>如果字节损坏或丢失，可以确定下一个UTF-8编码代码点的开始并重新同步。</p>
 <p>​</p>
 </li>
 </ul>
 </li>
 </ol>
-<h2 id="2-str与bytes"><a href="#2-str与bytes" class="headerlink" title="2. str与bytes"></a>2. str与bytes</h2><p>Python2.x中，字符串有两种表现类型：一个是Unicode（表示文本字符串）、一个是str（表示字节序列）。</p>
+<h2 id="2-str与bytes"><a class="markdownIt-Anchor" href="#2-str与bytes"></a> 2. str与bytes</h2>
+<p>Python2.x中，字符串有两种表现类型：一个是Unicode（表示文本字符串）、一个是str（表示字节序列）。</p>
 <p>在Python3.x中，使用str表示字符串，bytes表示字节序列。官方文档是这样介绍的：</p>
 <ul>
-<li><p>str （字符）</p>
-<p>Strings are immutable sequences of Unicode code points. </p>
+<li>
+<p>str （字符）</p>
+<p>Strings are immutable sequences of Unicode code points.</p>
 <p>str是一串不可变的Unicode码位（编码）序列。</p>
 </li>
-<li><p>bytes（字节）</p>
+<li>
+<p>bytes（字节）</p>
 <p>bytes is an immutable sequence of integers in the range <code>0 &lt;= x &lt; 256</code>.</p>
 <p>bytes是一串不可变的整数（0 &lt;= x &lt; 256）序列。</p>
 </li>
@@ -97,16 +339,17 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cushixinxin = 10084 #Unicode编号</div><div class="line">chr(cushixinxin) #chr函数</div><div class="line">Out[29]: &apos;❤&apos; #输出，粗实心心</div></pre></td></tr></table></figure>
 <p>下面是上面使用到的两个函数的原型：</p>
 <ul>
-<li><p>ord(<em>c</em>)</p>
+<li>
+<p>ord(<em>c</em>)</p>
 <p>Given a string representing one Unicode character, return an integer representing the Unicode code point of that character.</p>
 </li>
-</ul>
-<ul>
-<li><p><code>chr</code>(<em>i</em>)</p>
+<li>
+<p><code>chr</code>(<em>i</em>)</p>
 <p>Return the string representing a character whose Unicode code point is the integer <em>i</em>.</p>
 </li>
 </ul>
-<h2 id="3-参考资料"><a href="#3-参考资料" class="headerlink" title="3. 参考资料"></a>3. 参考资料</h2><p><a href="https://www.zhihu.com/question/19698598" target="_blank" rel="external">Python3变化</a></p>
+<h2 id="3-参考资料"><a class="markdownIt-Anchor" href="#3-参考资料"></a> 3. 参考资料</h2>
+<p><a href="https://www.zhihu.com/question/19698598" target="_blank" rel="external">Python3变化</a></p>
 <p><a href="https://docs.python.org/3/howto/unicode.html#" target="_blank" rel="external">Unicode HOWTO</a></p>
 ]]></content>
     
@@ -147,7 +390,8 @@
 <p>在正式进入前， 我们用Java来查看系统文件默认编码和调用System.out.Print方法时的编码（我的是中文版的Windows）。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//查看默认文件编码</div><div class="line">String encoding=System.getProperty(&quot;file.encoding&quot;);</div><div class="line">System.out.println(encoding);</div><div class="line">//输出： GBK</div><div class="line"></div><div class="line">//查看默认System.out编码</div><div class="line">OutputStreamWriter osw = new OutputStreamWriter(System.out);</div><div class="line">System.out.println(osw.getEncoding());</div><div class="line">//输出： GBK</div></pre></td></tr></table></figure>
 <p><strong>现在还我清白了吧，中文Windows的默认编码确实是GBK，不过Java中System.out默认的编码也是GBK，而Python是UTF-8</strong> ， 下面我们可以开始例子（栗子）了。（先记住，是GBK哦）</p>
-<h2 id="1-字符在Java中-JVM-到底是咋样的？"><a href="#1-字符在Java中-JVM-到底是咋样的？" class="headerlink" title="1. 字符在Java中(JVM)到底是咋样的？"></a>1. 字符在Java中(JVM)到底是咋样的？</h2><p>我们从<a href="/2017/08/29/charset-encoding-3/">上文</a>知道，Python2.x进行字符的操作时，最好将他们全部解码为Unicode后再进行操作。 无独有偶，Java（JVM）中进行字符的操作是也是先将其转换为Unicode，然后进行操作的。我们先来看张图（这是一张对号符号，很酷是不是，我们可以看到它在Unicode中的编号，你也可以在<a href="http://unicode-table.com/cn/#control-character" target="_blank" rel="external">这里</a>查找）。</p>
+<h2 id="1-字符在java中jvm到底是咋样的"><a class="markdownIt-Anchor" href="#1-字符在java中jvm到底是咋样的"></a> 1. 字符在Java中(JVM)到底是咋样的？</h2>
+<p>我们从<a href="/2017/08/29/charset-encoding-3/">上文</a>知道，Python2.x进行字符的操作时，最好将他们全部解码为Unicode后再进行操作。 无独有偶，Java（JVM）中进行字符的操作是也是先将其转换为Unicode，然后进行操作的。我们先来看张图（这是一张对号符号，很酷是不是，我们可以看到它在Unicode中的编号，你也可以在<a href="http://unicode-table.com/cn/#control-character" target="_blank" rel="external">这里</a>查找）。</p>
 <p><img src="http://i.imgur.com/5dy05bl.png" alt=""></p>
 <p>我们先来测试下这样写：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div><div class="line">System.out.format(&quot;%X&quot;, Integer.valueOf(infinite));</div><div class="line">//输出(正是编号) ： 221E</div></pre></td></tr></table></figure>
@@ -163,25 +407,33 @@
 <p>好了（确认是UTF-8），现在我们继续刚刚失败的例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">char duihao = 0x2713;</div><div class="line">System.out.println(duihao);</div><div class="line">//输出(哈哈，对了吧！) ： ✓</div></pre></td></tr></table></figure>
 <p><strong>现在我们终于明白了，原来和Python一样，字符在Java中(JVM)处理的时候，也变成了Unicode中的编号。JVM的这种约定使得一个字符存在的世界分为了两部分：JVM内部和OS的文件系统。在JVM内部，统一使用Unicode表示，当这个字符被从JVM内部移到外部（即保存为文件系统中的一个文件的内容时），就进行了编码转换（我们这里开始是Java默认的GBK，后来我们改为了UTF-8）。</strong></p>
-<h2 id="2-从Java（内存）到文件里"><a href="#2-从Java（内存）到文件里" class="headerlink" title="2. 从Java（内存）到文件里"></a>2. 从Java（内存）到文件里</h2><p>当你想要把字符保存到文件中去的时候，我们要对字符进行编码。如果默认的话就是使用GBK, 但是我们可以选择为UTF-8（方法如上，改项目属性） 。</p>
+<h2 id="2-从java内存到文件里"><a class="markdownIt-Anchor" href="#2-从java内存到文件里"></a> 2. 从Java（内存）到文件里</h2>
+<p>当你想要把字符保存到文件中去的时候，我们要对字符进行编码。如果默认的话就是使用GBK, 但是我们可以选择为UTF-8（方法如上，改项目属性） 。</p>
 <p>好了，现在我们将我们酷酷的符号保存到文件中去。（我们只演示第一个符号。注意：第一个符号用GBK或者UTF-8编码都行， 第二个用UTF-8吧。）</p>
 <p>我们要保存的字符：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div></pre></td></tr></table></figure>
 <ol>
-<li><p>使用默认为GBK的编码保存（正常显示，文件为GBK编码）。</p>
+<li>
+<p>使用默认为GBK的编码保存（正常显示，文件为GBK编码）。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PrintWriter out=new PrintWriter(new OutputStreamWriter(new FileOutputStream(&quot;I:/GBk.txt&quot;)));</div><div class="line">out.write(infinite);</div><div class="line">out.close();</div></pre></td></tr></table></figure>
 </li>
-<li><p>修改默认编码为UTF-8 （正常显示，文件为UTF-8编码）</p>
+<li>
+<p>修改默认编码为UTF-8 （正常显示，文件为UTF-8编码）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div><div class="line">PrintWriter out=new PrintWriter(new OutputStreamWriter(new FileOutputStream(&quot;I:/UTF-8.txt&quot;)));</div><div class="line">out.write(infinite);</div><div class="line">out.close();</div></pre></td></tr></table></figure>
 </li>
-<li><p>默认编码为GBK，但是我们使用UTF-8保存（正常显示，文件为UTF-8编码）</p>
+<li>
+<p>默认编码为GBK，但是我们使用UTF-8保存（正常显示，文件为UTF-8编码）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char infinite = &apos;∞&apos;;</div><div class="line">PrintWriter out=new PrintWriter(new OutputStreamWriter(new FileOutputStream(&quot;I:/UTF-8.txt&quot;),&quot;UTF-8&quot;));</div><div class="line">out.write(infinite);</div><div class="line">out.close();</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>上面使用的类OutputStreamWriter，就是可以指定编码的地方。（这里对Unicode值进行了编码， 用Java的话说就是字节流向字符流转换。）</p>
 <p>从文件中读取数据也是一样的， 采用对应的编码去读取， 别人家是UTF-8，你用GBK（默认的）或者ASCII上，那可不就是乱套了吗！</p>
-<h2 id="3-One-more-thing"><a href="#3-One-more-thing" class="headerlink" title="3. One more thing"></a>3. One more thing</h2><p>现在我们知道了，Java也是为了统一操作字符，现将其转换为为Unicode。 所以，在JVM中，字符是以Unicode中的编号值存在的。 当我们想要保存字符时，首先要将其进行编码（按正确的方式喔, 不然有些不能正常显示，像我们上面的例子一样），然后我们就可以写入文件中去了。（<strong>还要注意的就是，默认的编码方式，它给我们带来方便，有时可带来了不便</strong>。）</p>
-<h2 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4. 参考资料"></a>4. 参考资料</h2><p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/25/248213.html" target="_blank" rel="external">Java中的字符集编码入门（五）Java代码中的字符编码转换Part 1</a><br><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248056.html" target="_blank" rel="external">Java中的字符集编码入门（三）GB2312，GBK与中文网页</a><br><a href="http://stackoverflow.com/questions/11339955/python-string-encode-decode" target="_blank" rel="external">how-to-get-console-charset</a></p>
+<h2 id="3-one-more-thing"><a class="markdownIt-Anchor" href="#3-one-more-thing"></a> 3. One more thing</h2>
+<p>现在我们知道了，Java也是为了统一操作字符，现将其转换为为Unicode。 所以，在JVM中，字符是以Unicode中的编号值存在的。 当我们想要保存字符时，首先要将其进行编码（按正确的方式喔, 不然有些不能正常显示，像我们上面的例子一样），然后我们就可以写入文件中去了。（<strong>还要注意的就是，默认的编码方式，它给我们带来方便，有时可带来了不便</strong>。）</p>
+<h2 id="4-参考资料"><a class="markdownIt-Anchor" href="#4-参考资料"></a> 4. 参考资料</h2>
+<p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/25/248213.html" target="_blank" rel="external">Java中的字符集编码入门（五）Java代码中的字符编码转换Part 1</a><br>
+<a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248056.html" target="_blank" rel="external">Java中的字符集编码入门（三）GB2312，GBK与中文网页</a><br>
+<a href="http://stackoverflow.com/questions/11339955/python-string-encode-decode" target="_blank" rel="external">how-to-get-console-charset</a></p>
 ]]></content>
     
     <summary type="html">
@@ -222,7 +474,9 @@
 <p>之前两篇文章，我们说到了字符集和编码，如果你还不知道字符集和编码的区别，可以先去看看前两篇文章或者Wiki下。</p>
 <p>接下来的两篇文章我们准备讨论了Python下和Java下的乱码问题，本文我们先讨论Python平台(注意，以下提到的Python均为2.X版本)，如果你只准备看Java的，那我加油写。哈哈！</p>
 <p>让我们回到问题上来，为什么会有乱码呢？ 不知道你发现没有，通常乱码都是出现了我们要进行I/O转换时（比如，从硬盘到内存）。下面我们就来讨论下这几个容易出现乱码的地方。</p>
-<h2 id="1-从硬盘到内存"><a href="#1-从硬盘到内存" class="headerlink" title="1. 从硬盘到内存"></a>1. 从硬盘到内存</h2><h3 id="读取一般文件（相对Python源代码文件来说的）"><a href="#读取一般文件（相对Python源代码文件来说的）" class="headerlink" title="读取一般文件（相对Python源代码文件来说的）"></a>读取一般文件（相对Python源代码文件来说的）</h3><p>首先，我们看看系统默认的文件编码（<strong>声明使用的是Python2.x版本，3.x默认是’utf-8’</strong>）</p>
+<h2 id="1-从硬盘到内存"><a class="markdownIt-Anchor" href="#1-从硬盘到内存"></a> 1. 从硬盘到内存</h2>
+<h3 id="读取一般文件相对python源代码文件来说的"><a class="markdownIt-Anchor" href="#读取一般文件相对python源代码文件来说的"></a> 读取一般文件（相对Python源代码文件来说的）</h3>
+<p>首先，我们看看系统默认的文件编码（<strong>声明使用的是Python2.x版本，3.x默认是’utf-8’</strong>）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#打开iPython，输入命令</div><div class="line">In [1]: import sys</div><div class="line">In [2]: sys.getdefaultencoding()</div><div class="line">Out[2]: &apos;ascii&apos;</div></pre></td></tr></table></figure>
 <p>太可怕了，上次不是说Windows中文的默认编码是GBK嘛，骗人，骗人！先别急，我们慢慢说。我们从记事本说起。打开记事本，输入’A’,然后保存。</p>
 <p><img src="http://i.imgur.com/tGlM482.png" alt=""></p>
@@ -238,20 +492,23 @@
 <p><img src="http://i.imgur.com/kUP3l19.png" alt=""></p>
 <p>难道真是GBK编码吗？ 我们用Python验证一下。（这里使用codes包，下文还会提到）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [6]: import codecs #可以指定编码</div><div class="line">In [7]: f = codecs.open(&apos;Demo.txt&apos;, encoding=&apos;GBK&apos;)  #以GBK方式打开，用GB2312也行，为什么呢？不告诉你^_^</div><div class="line">In [8]: s = f.read()</div><div class="line">In [9]: print s</div><div class="line">A 中</div></pre></td></tr></table></figure>
-<p>现在知道了吧？ <strong>其实Windows（中文）默认的文件编码是GBK的（</strong>将到Java时也会验证这一点）。还记得我们讨论GBK时，知道它是兼容ASCII的（反正只是加了汉字进去）。所以它可以输入和显示中文（英文正常显示是必须的，世界上几乎所有的编码都能正常显示英文，我们可不一样…）。</p>
+<p>现在知道了吧？ **其实Windows（中文）默认的文件编码是GBK的（**将到Java时也会验证这一点）。还记得我们讨论GBK时，知道它是兼容ASCII的（反正只是加了汉字进去）。所以它可以输入和显示中文（英文正常显示是必须的，世界上几乎所有的编码都能正常显示英文，我们可不一样…）。</p>
 <p>最后，不要被它的外表骗了，我想Python去获取系统文件编码的时候可能就被骗了，当我加入中文时，却还用ASCII编码方式去读取文件，只能是乱码了。（其实，这里说的有点不对，Python2.x默认的编码就是’ASCII’，哈哈）</p>
 <p>文件保存时用的什么编码，我们最好也用什么编码去读取。（为什么不说必须呢，因为有些编码是兼容的，比如UTF-8就兼容ASCII呢）。用记事本也没什么不可以，只要编码指定正确就好了。</p>
-<h3 id="Python源代码文件"><a href="#Python源代码文件" class="headerlink" title="Python源代码文件"></a>Python源代码文件</h3><p>Python源代码文件一般不用我们读取，主要是由Python解释器来读取执行。所以如果它读出来是乱码，咋们的程序就别想运行了。</p>
+<h3 id="python源代码文件"><a class="markdownIt-Anchor" href="#python源代码文件"></a> Python源代码文件</h3>
+<p>Python源代码文件一般不用我们读取，主要是由Python解释器来读取执行。所以如果它读出来是乱码，咋们的程序就别想运行了。</p>
 <p>还记得这句话吗，就是告诉解释器，读取该文件时请用UTF-8。（如果你文件全是字母的话倒不用，可我们不是还要写中文吗…），如果不声明，解释器将按照默认的编码读取（Python2.x是ASCII, Python3是UTF-8)。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># -*- coding: utf-8 -*-</div></pre></td></tr></table></figure>
 <p>上面说的是读取文件时要注意的，同样，从内存中写入文件也要注意编码指定要一致（一致最好）。不能说内存中是’UTF-8’或在’UTF-16’编码的，你却用ASCII去保存，那就有你好看了。（如果在内存中编码为’UTF-16’，一般也是用’UTF-8’保存，不过保存前先做转换，UTF-8常用些）。</p>
-<h2 id="2-内存中，Python怎样进行操作的？"><a href="#2-内存中，Python怎样进行操作的？" class="headerlink" title="2. 内存中，Python怎样进行操作的？"></a>2. 内存中，Python怎样进行操作的？</h2><p>如果用Python2.x读取多个文件，有’UTF-8’、’GBk’编码，我们要将这些文件中的内容合并，然后保存的一个新文件中，那应该怎么做呢？不管， 先将他们读进来再说。</p>
+<h2 id="2-内存中python怎样进行操作的"><a class="markdownIt-Anchor" href="#2-内存中python怎样进行操作的"></a> 2. 内存中，Python怎样进行操作的？</h2>
+<p>如果用Python2.x读取多个文件，有’UTF-8’、’GBk’编码，我们要将这些文件中的内容合并，然后保存的一个新文件中，那应该怎么做呢？不管， 先将他们读进来再说。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">In [10]: f1 = open(&apos;Demo1.txt&apos;) #f1中只有一个&apos;A&apos; ，记事本默认保存方式</div><div class="line"></div><div class="line">In [11]: f2 = open(&apos;Demo2.txt&apos;) #f2中有一个&apos;A&apos; 和&apos;中&apos; ，记事本默认保存方式</div><div class="line"></div><div class="line">In [12]: f3 = open(&apos;Demo3.txt&apos;) #f3中有一个&apos;A&apos; 和&apos;中&apos; ，选择&apos;UTF-8&apos;保存</div><div class="line"></div><div class="line">In [13]: s1 = f1.read()</div><div class="line"></div><div class="line">In [14]: s2 = f2.read()</div><div class="line"></div><div class="line">In [15]: s3 = f3.read()</div></pre></td></tr></table></figure>
 <p>现在要将他们合并，然后保存。不过，等等，就这样将他们连接起来，他们的编码方式不兼容啊！保存时我们应该选择什么编码保存呢？这是个问题。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">In [16]: f4 = open(&apos;Demo4.txt&apos;, &apos;w&apos;) #打开新文件 </div><div class="line"></div><div class="line">In [17]: f4.write(s1 + s2 + s3) #保存</div><div class="line"></div><div class="line">In [18]: f4.close()</div></pre></td></tr></table></figure>
 <p>这时打开文件（就用记事本，吓我一跳，这是什么啊！可以看到前两个文件保存正确，但是第三文件的内容不能正常显示）。</p>
 <p><img src="http://i.imgur.com/VeY1OQG.png" alt=""></p>
-<p>我们知道的是，记事本再神奇也没有这么神奇，知道前面用GBK，后面用UTF-8…<br>所以保存之前，我们可以将他们转换为同一种编码再保存。我们先看看Python2中str与unicode的关系。（str是编码后的；Unicode是未经编码的，其实它就是字符集）</p>
+<p>我们知道的是，记事本再神奇也没有这么神奇，知道前面用GBK，后面用UTF-8…<br>
+所以保存之前，我们可以将他们转换为同一种编码再保存。我们先看看Python2中str与unicode的关系。（str是编码后的；Unicode是未经编码的，其实它就是字符集）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(Python2.x str与unicode的关系)</div><div class="line"></div><div class="line">&lt;type &apos;basestring&apos;&gt;</div><div class="line">   |</div><div class="line">   +--&lt;type &apos;str&apos;&gt;</div><div class="line">   |</div><div class="line">   +--&lt;type &apos;unicode&apos;&gt;</div></pre></td></tr></table></figure>
 <p>原来str,和unicode都是basestring的孩子，由于Python的出现比Unicode字符集出现早，是后来才支持Unicode的。<strong>这里要知道的是，Unicode不是一种编码噢，一个Unicode字符在内存中的值就是在Unicode字符集编号的值</strong>，（<strong>这里还要说一下的就是，记事本中的unicode保存实际是按照UTF-16编码保存的，因为当初Unicode字符集使用16位，而UTF-16也是最小使用16位，所以容易搞错，要记住，Unicode仍然不是指编码</strong>）。这里我们就要使用decode方法，意思就是解码，我们先看看decode是什么意思。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">s.decode(encoding)  #将str解码为Unicode</div><div class="line">&lt;type &apos;str&apos;&gt; to &lt;type &apos;unicode&apos;&gt;</div><div class="line"></div><div class="line">u.encode(encoding) #将Unicode编码str</div><div class="line">&lt;type &apos;unicode&apos;&gt; to &lt;type &apos;str&apos;&gt;</div></pre></td></tr></table></figure>
@@ -260,19 +517,26 @@
 <p>下面就是见证奇迹的时刻： （你没有看错，正常显示，最后保存用的是UTF-8）。</p>
 <p>你可能说，要不要这么麻烦啊，其实是可以滴，Python提供了codecs,方便我们进行Unicode与str之间的编码和解码操作，下面来演示上面的例子。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">In [27]: s1 = codecs.open(&apos;Demo1.txt&apos;, encoding=&apos;GBK&apos;).read()</div><div class="line"></div><div class="line">In [28]: s2 = codecs.open(&apos;Demo2.txt&apos;, encoding=&apos;GBK&apos;).read()</div><div class="line"></div><div class="line">In [29]: s3 = codecs.open(&apos;Demo3.txt&apos;, encoding=&apos;UTF-8&apos;).read()</div><div class="line"></div><div class="line">In [30]: f7 = codecs.open(&apos;Demo7.txt&apos;, &apos;w&apos;, encoding=&apos;UTF-8&apos;)</div><div class="line"></div><div class="line">In [31]: f7.write(s1+s2+s3)</div><div class="line"></div><div class="line">In [32]: f7.close() #结果和上面一样，正常显示，最后保存用的是UTF-8</div></pre></td></tr></table></figure>
-<h2 id="3-One-more-thing"><a href="#3-One-more-thing" class="headerlink" title="3. One more thing"></a>3. One more thing</h2><p><strong>要在Python避免乱码，我们需要记住：</strong></p>
+<h2 id="3-one-more-thing"><a class="markdownIt-Anchor" href="#3-one-more-thing"></a> 3. One more thing</h2>
+<p><strong>要在Python避免乱码，我们需要记住：</strong></p>
 <ul>
 <li><strong>Decode early</strong> #可以自己decode,也可以使用codes.open</li>
 <li><strong>Unicode everywhere</strong> #操作时，一律unicode</li>
 <li><strong>Encode late</strong> #要保存是，记得编码，可以用encode，或者codes.open</li>
 </ul>
-<p>所以，最好的情况还是用文件保存的编码打开（因为不确定是否为UTF-8编码的），然后解码为Unicode，进行操作，然后保存。（下面我以UTF-8文件为例子，有图有真相^_^）。</p>
+<p>所以，最好的情况还是用文件保存的编码打开（因为不确定是否为UTF-8编码的），然后解码为Unicode，进行操作，然后保存。（下面我以UTF-8文件为例子，有图有真相<sup>_</sup>）。</p>
 <p><img src="http://i.imgur.com/AGUbFqq.png" alt=""></p>
-<h2 id="4-关于print输出问题"><a href="#4-关于print输出问题" class="headerlink" title="4. 关于print输出问题"></a>4. 关于print输出问题</h2><p>关于为什么是Unicode，我们用print输出时我们可以看见正确的字符呢？按理来说我们应该先对其进行编码才行呢？其实，在调用print输出时，Python已经按照UTF-8对其进行编码了。我们来验证一下。</p>
+<h2 id="4-关于print输出问题"><a class="markdownIt-Anchor" href="#4-关于print输出问题"></a> 4. 关于print输出问题</h2>
+<p>关于为什么是Unicode，我们用print输出时我们可以看见正确的字符呢？按理来说我们应该先对其进行编码才行呢？其实，在调用print输出时，Python已经按照UTF-8对其进行编码了。我们来验证一下。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">In [33]: import sys</div><div class="line"></div><div class="line">In [34]: sys.stdout.encoding</div><div class="line"></div><div class="line">Out[34]: &apos;UTF-8&apos;</div><div class="line"></div><div class="line">In [35]: print u&apos;\u2713&apos; #Python帮我们编码了</div><div class="line">✓</div></pre></td></tr></table></figure>
 <p>最后在附上一张图（证明上面使用的是Unicode的编号，可以在<a href="http://unicode-table.com/cn/#control-character" target="_blank" rel="external">这里</a>查找）：</p>
 <p><img src="http://i.imgur.com/ttdQkQh.png" alt=""></p>
-<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/25/248213.html" target="_blank" rel="external">Java中的字符集编码入门（五）Java代码中的字符编码转换Part 1</a><br><a href="http://farmdev.com/talks/unicode/" target="_blank" rel="external">Unicode In Python, Completely Demystified</a><br><a href="http://stackoverflow.com/questions/11339955/python-string-encode-decode" target="_blank" rel="external">python string encode / decode</a><br><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">Python字符串和编码</a><br><a href="http://stackoverflow.com/questions/2596714/why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii" target="_blank" rel="external">why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii</a></p>
+<h2 id="5-参考资料"><a class="markdownIt-Anchor" href="#5-参考资料"></a> 5. 参考资料</h2>
+<p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/25/248213.html" target="_blank" rel="external">Java中的字符集编码入门（五）Java代码中的字符编码转换Part 1</a><br>
+<a href="http://farmdev.com/talks/unicode/" target="_blank" rel="external">Unicode In Python, Completely Demystified</a><br>
+<a href="http://stackoverflow.com/questions/11339955/python-string-encode-decode" target="_blank" rel="external">python string encode / decode</a><br>
+<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">Python字符串和编码</a><br>
+<a href="http://stackoverflow.com/questions/2596714/why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii" target="_blank" rel="external">why-does-python-print-unicode-characters-when-the-default-encoding-is-ascii</a></p>
 ]]></content>
     
     <summary type="html">
@@ -311,20 +575,32 @@
 <p>我们知道计算机只认识数字（就是0、1那些东西），可是我们对数字并没有计算机那么敏感，我们还是喜欢看到字符（正如书本上能看到的那样）。这时就需要编码了，当我们需要看到字符时，它会将内存中的数字（一串二进制数）映射为对应的字符来显示给我们看。而只是内存中处理时，任然是一堆数字。</p>
 <p>问题来了，怎么映射的呢？简单来说就是查表呗（当然是提前定义好的），用数字去找它对应的字符。那这个表是不是我们<a href="/2017/08/28/charset-encoding-1/">上文</a>说到的字符集呢？是，还是不是呢，其实不一定。又迷糊了吧？不过请先记着一句话：<strong>一个字符集可以对应很多编码的实现。</strong></p>
 <p>那我们分别来看看每种字符集的编码都有哪些实现吧！</p>
-<h2 id="1-ASCII字符集的编码"><a href="#1-ASCII字符集的编码" class="headerlink" title="1. ASCII字符集的编码"></a>1. ASCII字符集的编码</h2><p>其实就叫ASCII编码，可没有骗你，因为该编码中字符在内存中使用的值与字符集规定编号的一样，也就是说，存储该种字符时，就是将字符集中的编号变为二进制书就好了。（比如1，在字符集的编号为1，人家在内存也是0000 0001）因为一样，所以它对我们还算友善(理错误也不会犯迷糊)。但是下面的一个可就不是这样了。</p>
-<h2 id="2-Unicode字符集的编码"><a href="#2-Unicode字符集的编码" class="headerlink" title="2. Unicode字符集的编码"></a>2. Unicode字符集的编码</h2><p>上文提到Unicode与UCS合并了，统一了规则，那我们就说说常用的Unicode编码：UTF-8, UTF-16, UTF-32。</p>
-<h3 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a>UTF-8</h3><p>UTF-8（8-bit Unicode Transformation Format）是一种针对Unicode的可变长度字符编码，看见了吗，它是可变的，为什么呢？<a href="">上文</a>提到Unicode字符集一开始使用的是16位，但是不够，而UCS一上来使用31位，太多，而且美国人们也不干了，凭什么我们7位可以表示的东西，你们偏偏要拿这么多位来表示。（浪费，可耻啊！）故UTF-8就是一个折中的办法，看它的名字’UTF-8’像只是用8位是的，但是不是的。你可以理解为它最少使用8位（’UTF-16’和’UTF-32’一样）。<strong>所以UTF-8这种编码，字符在内存中的值与Unicode规定的编号是不一定一样的</strong>，比如UTF-8是兼容ASCII编码的，对于英文字符，他们将会其编码成1个字节（尽管只用了7位，但是占了8位嘛，正好一个字节），此时UTF-8表示与ASCII字符表示是一样的。但是很多其他的字符编码后可就与其在字符集的编号不一样了，比如’中’在Unicode编号为0x4E2D ,但是在UTF-8编码后却为0xE6B189。现在应该对字符集和编码有了更深的认识。</p>
-<h3 id="UTF-16"><a href="#UTF-16" class="headerlink" title="UTF-16"></a>UTF-16</h3><p>UTF-16也是Unicode的其中一个使用方式。 <strong>UTF-16比起UTF-8，好处在于大部分字符都以固定长度的字节 (2字节) 储存，但UTF-16却无法兼容于ASCII编码。</strong> 所以UTF-8对Unicode规定的前65536字符不做转换（还记得前面说的Unicode开始设计的表示字符大小吗？），就是用其编号作为编码后的值，比如’中’在Unicode编号为0x4E2D ,在UTF-16编码后也为0x4E2D。（但是对于之后的值，它也需要做变换），注意<strong>通常我们说的Unicode的编码就是它，因为它前65536个字符的编码与编号一致，但是现在要知道的是Unicode只用字符集，而UTF-16才是编码。希望明白了。</strong></p>
-<h3 id="UTF-32"><a href="#UTF-32" class="headerlink" title="UTF-32"></a>UTF-32</h3><p>UTF-32就厉害了,它对所有的Unicode字符均不做变换，直接使用编号存储！（这样会简单很多），只是这种编码方案太浪费存储空间（就连1个字节就可以搞定的英文字符，它都必须使用4个字节），因而尽管使用起来方便（不需要任何转换），却没有得到普及。</p>
-<h2 id="3-GB2312和GBK字符集的编码"><a href="#3-GB2312和GBK字符集的编码" class="headerlink" title="3. GB2312和GBK字符集的编码"></a>3. GB2312和GBK字符集的编码</h2><p>还记得<a href="/2017/08/28/charset-encoding-1/">上文</a>说的GB2312和GBK字符集吗？其实你也可以叫它们是一种编码（对了，中文Windows的默认编码就是GBK），因为它们也是使用字符集中的编号作为编码值的（和UTF-32一样，直接，暴力），哈哈。不过，现在知道它们的关系了,一览无余呢…</p>
-<h2 id="4-One-more-thing"><a href="#4-One-more-thing" class="headerlink" title="4. One more thing"></a>4. One more thing</h2><p>现在可以回答<strong>UTF-8 ? UTF-16? UTF-32? ISO-8859-*? ASCII? GB2312? GBK? Unicode? UCS?</strong>哪些是字符集，哪些是编码，那些既可以说的字符集又可以说是编码了吧！</p>
+<h2 id="1-ascii字符集的编码"><a class="markdownIt-Anchor" href="#1-ascii字符集的编码"></a> 1. ASCII字符集的编码</h2>
+<p>其实就叫ASCII编码，可没有骗你，因为该编码中字符在内存中使用的值与字符集规定编号的一样，也就是说，存储该种字符时，就是将字符集中的编号变为二进制书就好了。（比如1，在字符集的编号为1，人家在内存也是0000 0001）因为一样，所以它对我们还算友善(理错误也不会犯迷糊)。但是下面的一个可就不是这样了。</p>
+<h2 id="2-unicode字符集的编码"><a class="markdownIt-Anchor" href="#2-unicode字符集的编码"></a> 2. Unicode字符集的编码</h2>
+<p>上文提到Unicode与UCS合并了，统一了规则，那我们就说说常用的Unicode编码：UTF-8, UTF-16, UTF-32。</p>
+<h3 id="utf-8"><a class="markdownIt-Anchor" href="#utf-8"></a> UTF-8</h3>
+<p>UTF-8（8-bit Unicode Transformation Format）是一种针对Unicode的可变长度字符编码，看见了吗，它是可变的，为什么呢？<a href="">上文</a>提到Unicode字符集一开始使用的是16位，但是不够，而UCS一上来使用31位，太多，而且美国人们也不干了，凭什么我们7位可以表示的东西，你们偏偏要拿这么多位来表示。（浪费，可耻啊！）故UTF-8就是一个折中的办法，看它的名字’UTF-8’像只是用8位是的，但是不是的。你可以理解为它最少使用8位（’UTF-16’和’UTF-32’一样）。<strong>所以UTF-8这种编码，字符在内存中的值与Unicode规定的编号是不一定一样的</strong>，比如UTF-8是兼容ASCII编码的，对于英文字符，他们将会其编码成1个字节（尽管只用了7位，但是占了8位嘛，正好一个字节），此时UTF-8表示与ASCII字符表示是一样的。但是很多其他的字符编码后可就与其在字符集的编号不一样了，比如’中’在Unicode编号为0x4E2D ,但是在UTF-8编码后却为0xE6B189。现在应该对字符集和编码有了更深的认识。</p>
+<h3 id="utf-16"><a class="markdownIt-Anchor" href="#utf-16"></a> UTF-16</h3>
+<p>UTF-16也是Unicode的其中一个使用方式。 <strong>UTF-16比起UTF-8，好处在于大部分字符都以固定长度的字节 (2字节) 储存，但UTF-16却无法兼容于ASCII编码。</strong> 所以UTF-8对Unicode规定的前65536字符不做转换（还记得前面说的Unicode开始设计的表示字符大小吗？），就是用其编号作为编码后的值，比如’中’在Unicode编号为0x4E2D ,在UTF-16编码后也为0x4E2D。（但是对于之后的值，它也需要做变换），注意<strong>通常我们说的Unicode的编码就是它，因为它前65536个字符的编码与编号一致，但是现在要知道的是Unicode只用字符集，而UTF-16才是编码。希望明白了。</strong></p>
+<h3 id="utf-32"><a class="markdownIt-Anchor" href="#utf-32"></a> UTF-32</h3>
+<p>UTF-32就厉害了,它对所有的Unicode字符均不做变换，直接使用编号存储！（这样会简单很多），只是这种编码方案太浪费存储空间（就连1个字节就可以搞定的英文字符，它都必须使用4个字节），因而尽管使用起来方便（不需要任何转换），却没有得到普及。</p>
+<h2 id="3-gb2312和gbk字符集的编码"><a class="markdownIt-Anchor" href="#3-gb2312和gbk字符集的编码"></a> 3. GB2312和GBK字符集的编码</h2>
+<p>还记得<a href="/2017/08/28/charset-encoding-1/">上文</a>说的GB2312和GBK字符集吗？其实你也可以叫它们是一种编码（对了，中文Windows的默认编码就是GBK），因为它们也是使用字符集中的编号作为编码值的（和UTF-32一样，直接，暴力），哈哈。不过，现在知道它们的关系了,一览无余呢…</p>
+<h2 id="4-one-more-thing"><a class="markdownIt-Anchor" href="#4-one-more-thing"></a> 4. One more thing</h2>
+<p>现在可以回答**UTF-8 ? UTF-16? UTF-32? ISO-8859-*? ASCII? GB2312? GBK? Unicode? UCS?**哪些是字符集，哪些是编码，那些既可以说的字符集又可以说是编码了吧！</p>
 <ul>
 <li>ASCII GB2312 GBK Unicode UCS 可以说是字符集</li>
 <li>UTF-8 UTF-16 UTF-32 ISO-8859-*（系列） ASCII GB2312 GBK 都可以说是编码</li>
 <li>ASCII GB2312 GBK 这些嘛？你懂的。</li>
 </ul>
 <p><a href="/2017/08/29/charset-encoding-3/">下篇文章</a>我们讨论一下在哪些地方容易出现编码问题（乱码）呢？</p>
-<h2 id="5-参考资料"><a href="#5-参考资料" class="headerlink" title="5. 参考资料"></a>5. 参考资料</h2><p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248041.html" target="_blank" rel="external">Java中的字符集编码入门（二）编码字符集与字符集编码的区别</a><br><a href="https://en.wikipedia.org/wiki/UTF-8#Examples" target="_blank" rel="external">UTF-8</a><br><a href="https://en.wikipedia.org/wiki/UTF-16" target="_blank" rel="external">UTF-16</a><br><a href="https://en.wikipedia.org/wiki/UTF-32" target="_blank" rel="external">UTF-32</a><br><a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;item_id=IWS-AppendixA#sec3。" target="_blank" rel="external">Mapping codepoints to Unicode encoding forms</a></p>
+<h2 id="5-参考资料"><a class="markdownIt-Anchor" href="#5-参考资料"></a> 5. 参考资料</h2>
+<p><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248041.html" target="_blank" rel="external">Java中的字符集编码入门（二）编码字符集与字符集编码的区别</a><br>
+<a href="https://en.wikipedia.org/wiki/UTF-8#Examples" target="_blank" rel="external">UTF-8</a><br>
+<a href="https://en.wikipedia.org/wiki/UTF-16" target="_blank" rel="external">UTF-16</a><br>
+<a href="https://en.wikipedia.org/wiki/UTF-32" target="_blank" rel="external">UTF-32</a><br>
+<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;item_id=IWS-AppendixA#sec3%E3%80%82" target="_blank" rel="external">Mapping codepoints to Unicode encoding forms</a></p>
 ]]></content>
     
     <summary type="html">
@@ -359,26 +635,44 @@
 <p><a href="/2017/08/29/charset-encoding-4/">编码？你需要知道的那些事：4-Java为什么有乱码</a></p>
 <p><strong>更新：</strong></p>
 <p><a href="/2017/08/29/charset-encoding-5/">关于Python3 的编码</a></p>
-<p>相信大家都遇到过编码问题（正所谓所有问题都解决了，就剩下乱码了^_^）。每次出现这种问题时心里各种不爽，还让不让愉快地写代码了，人家不干了， 程序何必难为程序员啊！<br>你这时拍案而起，扬长而去，留下潇洒的背影…但是问题并么有解决，还是得埋头苦干啊 ， 乱码是怎么来的呢？</p>
-<p><img src="http://i.imgur.com/CH5cp49.png" alt=""><br>​                    <a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">图片来源</a></p>
+<p>相信大家都遇到过编码问题（正所谓所有问题都解决了，就剩下乱码了<sup>_</sup>）。每次出现这种问题时心里各种不爽，还让不让愉快地写代码了，人家不干了， 程序何必难为程序员啊！<br>
+你这时拍案而起，扬长而去，留下潇洒的背影…但是问题并么有解决，还是得埋头苦干啊 ， 乱码是怎么来的呢？</p>
+<p><img src="http://i.imgur.com/CH5cp49.png" alt=""><br>
+​					<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001386819196283586a37629844456ca7e5a7faa9b94ee8000" target="_blank" rel="external">图片来源</a></p>
 <p>要明白这个问题， 我们得先了解两个概念（可以说是非常重要的吧）。</p>
 <ol>
 <li><strong>编码字符集(Charset)，以下称为字符集</strong></li>
 <li><strong>字符集编码(Encoding)，以下称为编码</strong></li>
 </ol>
-<p>我们先来了解字符集是什么东东,<a href="(/2017/08/29/charset-encoding-2/">下篇</a>)再进行讨论编码。</p>
-<h2 id="1-字符集-Charset"><a href="#1-字符集-Charset" class="headerlink" title="1. 字符集(Charset)"></a>1. 字符集(Charset)</h2><p>简单来说，字符集就是我们能看到的东西，它决定了我们能在计算机上看到什么。我们常见常用的字符集有哪些呢？ <strong>UTF-8 ? UTF-16? UTF-32? ISO-8859-*? ASCII? GB2312? GBK? Unicode? UCS?</strong>好吧， 你知道的真不少，但是上面的不全是所谓的字符集。有些我们叫字符集，有些叫编码，有些居然即又叫字符集又叫编码。希望你没有被弄迷糊。不过，先看，最后给出总结。</p>
-<h3 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h3><p>没错，就是大名鼎鼎的ASCII(American Standard Code for Information Interchange，美国信息交换标准代码）。注意哦，它主要用于显示<strong>现代英语</strong>的（原因你懂的，毕竟人家是先行者）。<strong>ASCII等同于国际标准ISO/IEC 646。</strong></p>
+<p>我们先来了解字符集是什么东东,<a href="(/2017/08/29/charset-encoding-2/)">下篇</a>再进行讨论编码。</p>
+<h2 id="1-字符集charset"><a class="markdownIt-Anchor" href="#1-字符集charset"></a> 1. 字符集(Charset)</h2>
+<p>简单来说，字符集就是我们能看到的东西，它决定了我们能在计算机上看到什么。我们常见常用的字符集有哪些呢？ **UTF-8 ? UTF-16? UTF-32? ISO-8859-*? ASCII? GB2312? GBK? Unicode? UCS?**好吧， 你知道的真不少，但是上面的不全是所谓的字符集。有些我们叫字符集，有些叫编码，有些居然即又叫字符集又叫编码。希望你没有被弄迷糊。不过，先看，最后给出总结。</p>
+<h3 id="ascii"><a class="markdownIt-Anchor" href="#ascii"></a> ASCII</h3>
+<p>没错，就是大名鼎鼎的ASCII(American Standard Code for Information Interchange，美国信息交换标准代码）。注意哦，它主要用于显示<strong>现代英语</strong>的（原因你懂的，毕竟人家是先行者）。<strong>ASCII等同于国际标准ISO/IEC 646。</strong></p>
 <p>ASCII规定的一个字符占8位（8位可以表示的字符为：2^8=256个），但是美国人民说，我们只需要空格及94个“可印刷字符”就够了（没办法，任性），这时，<a href="http://www.iso.org/iso/home.html" target="_blank" rel="external">国际标准化组织(ISO)</a>及<a href="http://www.iec.ch/" target="_blank" rel="external">国际电工委员会(IEC)</a>提出，可以使用剩下的区域来储存及表示其他使用拉丁字母的语言（主要是欧洲国家的语言）嘛,从此便有了ISO 8859-*系列（兼容ASCII，因为主要进行的是扩展），比如（ISO/IEC 8859-1 (Latin-1) - 西欧语言，ISO/IEC 8859-2 (Latin-2) - 中欧语言等等）。</p>
-<h3 id="Unicode和UCS"><a href="#Unicode和UCS" class="headerlink" title="Unicode和UCS"></a>Unicode和UCS</h3><p><strong>Unicode：</strong>来源于美国加州的Unicode组织（包括苹果，惠普，微软，施乐等公司）。Unicode是为了解决传统的字符集方案的局限而产生的，例如上面提到的ISO 8859-1字符集虽然在特定的国家广泛使用，可是在不同国家间却经常出现不兼容的情况（此时很多国家都有自己的字符集，比如我们，谁叫ASCII不支持中文的…）。</p>
+<h3 id="unicode和ucs"><a class="markdownIt-Anchor" href="#unicode和ucs"></a> Unicode和UCS</h3>
+<p>**Unicode：**来源于美国加州的Unicode组织（包括苹果，惠普，微软，施乐等公司）。Unicode是为了解决传统的字符集方案的局限而产生的，例如上面提到的ISO 8859-1字符集虽然在特定的国家广泛使用，可是在不同国家间却经常出现不兼容的情况（此时很多国家都有自己的字符集，比如我们，谁叫ASCII不支持中文的…）。</p>
 <p>Unicode的目的之一就是让世界人民都用Ta家的字符集，Ta的方法也是非常的简单粗暴，不就是字符太多8位表示不了吗？加！所以Ta一开始采用了16位（2^16=65536）, 可以表示65536个字符，可Ta万万没想到的是，全世界的字符数量超乎Ta想象，待Ta认识到时，Unicode的规范已经制定的八九不离十了，也得到了很大的普及（看看Ta的组成公司就知道了），重新来过是不可能了，所以Ta也给我们带来了一点点的麻烦（但是当初的目的是好的），等我们讨论到编码问题时还会说到这个问题的解决方法（当然是一个妥协的方法）。</p>
 <p><strong>UCS（ Universal Coded Character Set）：</strong> 在Unicode制定的同时，还有一个机构也在为世界人民的幸福苦苦思索，他就是我们上面提到的<a href="http://www.iso.org/iso/home.html" target="_blank" rel="external">国际标准化组织(ISO)</a>（好像哪里都有他的事…），他提出了UCS字符集，也就是ISO/IEC 10646 （名字好像上面提到的ISO/IEC 646他哥）。CUS定义了一个31位的字符集（一共是32位，不过只用31位来表示字符，其实已经很多了），这样可以表示的字符贼大了（2^31=2147483648个），足以包括世界上所有的字符（火星的呢，还不确定）。但是他也有一个问题，一个字符’A’,ASCII一共占用8位，而他却要占用32位，也太浪费了不是，当初的计算机内存可是很珍贵的（现在也一样），同样在讨论编码问题时，也会说到一个解决办法（同样是折中的）。</p>
 <p><strong>UCS与Unicode合并？</strong> 由于Unicode与UCS(ISO/IEC 10646国际编码标准)从内容上来说是同步一致的。在1991年，Unicode与ISO国际标准化组织决定共同制订一套适用于多种语言文本的通用编码标准。Unicode与UCS于1992年1月正式合作发展一套通用编码标准。（两者付出了很多的努力，因为他们一开始就是不兼容的，但是幸运的是，他们的努力得到了回报，非常感人）。最终，两者统一了字符集（即任何一个在Unicode中存在的字符，在UCS中也存在），且最靠前的65535个字符也统一了字符的编码。对于码空间，两者同意以一百一十万为限（即两者都认为虽然65536不够，但2的31次方又太大，一百一十万是个双方都可接受的码空间大小，也够用，当然，这里说的一百一十万只是个约数），Unicode将码空间扩展到了一百一十万，而UCS将不使用一百一十万以后的码位。也就是说，<strong>现在再讲Unicode只包含65536个字符是不对的</strong>。除了对已经定义的字符进行统一外，Unicode联盟与ISO工作组也同意今后任何的扩展工作两者均保持同步，因此虽然从历史的意义上讲Unicode与UCS不是一回事（甚至细节上说也不是一回事），<strong>但现在提起Unicode，指代两者均无不妥。</strong></p>
-<h3 id="B2312和GBK"><a href="#B2312和GBK" class="headerlink" title="B2312和GBK"></a>B2312和GBK</h3><p>终于说到咱们的字符集了（注意目前一直在讲的都是字符集），那就是熟悉而又陌生的GB2312和GBK，是不是很鸡冻呢？<br><strong>GB2312：</strong>全称是:信息交换用汉字编码字符集，可见，最初它就是一种字符集，它兼容ASCII，同时加入了6763个汉字和一些其他字符。</p>
-<p><strong>GBK：</strong>全称是:汉字内码扩展规范,看着名字就知道了，他其实是GB2312的扩展，加入了更多的汉字。</p>
+<h3 id="b2312和gbk"><a class="markdownIt-Anchor" href="#b2312和gbk"></a> B2312和GBK</h3>
+<p>终于说到咱们的字符集了（注意目前一直在讲的都是字符集），那就是熟悉而又陌生的GB2312和GBK，是不是很鸡冻呢？<br>
+**GB2312：**全称是:信息交换用汉字编码字符集，可见，最初它就是一种字符集，它兼容ASCII，同时加入了6763个汉字和一些其他字符。</p>
+<p>**GBK：**全称是:汉字内码扩展规范,看着名字就知道了，他其实是GB2312的扩展，加入了更多的汉字。</p>
 <p><strong>不对,GB2312和GBK不是常说的编码吗？</strong>，好吧，等我们讨论到编码时再来回答这个问题。</p>
-<h2 id="2-回顾字符集"><a href="#2-回顾字符集" class="headerlink" title="2. 回顾字符集"></a>2. 回顾字符集</h2><p>上面讨论到了这么多的字符集ASCII, Unicode, USC，GBK等等，他们的意义就是决定了我们可以看到的字符总数（当然是在计算机中啦，手写谁不会呢…）。编码准备留到<a href="(/2017/08/29/charset-encoding-2/">下一篇</a>)文章讨论。</p>
-<h2 id="3-参考资料"><a href="#3-参考资料" class="headerlink" title="3. 参考资料"></a>3. 参考资料</h2><p><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000" target="_blank" rel="external">Python字符串和编码</a><br><a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=iws-appendixa" target="_blank" rel="external">Mapping codepoints to Unicode encoding forms</a><br><a href="http://www.joelonsoftware.com/articles/Unicode.html" target="_blank" rel="external">The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)</a><br><a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248014.html" target="_blank" rel="external">Java中的字符集编码入门</a><br><a href="http://stackoverflow.com/questions/2281646/whats-the-difference-between-encoding-and-charset" target="_blank" rel="external">What’s the difference between encoding and charset?</a><br><a href="https://zh.wikipedia.org/wiki/Unicode" target="_blank" rel="external">Unicode</a><br><a href="https://zh.wikipedia.org/wiki/%E9%80%9A%E7%94%A8%E5%AD%97%E7%AC%A6%E9%9B%86#Unicode.E5.92.8CISO_10646.E7.9A.84.E5.85.B3.E7.B3.BB" target="_blank" rel="external">通用字符集</a><br><a href="https://zh.wikipedia.org/wiki/UTF-8" target="_blank" rel="external">UTF-8</a><br><a href="http://unicode.org/" target="_blank" rel="external">unicode.org</a><br><a href="http://baike.baidu.com/view/40801.htm" target="_blank" rel="external">unicode百科</a></p>
+<h2 id="2-回顾字符集"><a class="markdownIt-Anchor" href="#2-回顾字符集"></a> 2. 回顾字符集</h2>
+<p>上面讨论到了这么多的字符集ASCII, Unicode, USC，GBK等等，他们的意义就是决定了我们可以看到的字符总数（当然是在计算机中啦，手写谁不会呢…）。编码准备留到<a href="(/2017/08/29/charset-encoding-2/)">下一篇</a>文章讨论。</p>
+<h2 id="3-参考资料"><a class="markdownIt-Anchor" href="#3-参考资料"></a> 3. 参考资料</h2>
+<p><a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000" target="_blank" rel="external">Python字符串和编码</a><br>
+<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=iws-appendixa" target="_blank" rel="external">Mapping codepoints to Unicode encoding forms</a><br>
+<a href="http://www.joelonsoftware.com/articles/Unicode.html" target="_blank" rel="external">The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)</a><br>
+<a href="http://www.blogjava.net/zhenandaci/archive/2008/12/24/248014.html" target="_blank" rel="external">Java中的字符集编码入门</a><br>
+<a href="http://stackoverflow.com/questions/2281646/whats-the-difference-between-encoding-and-charset" target="_blank" rel="external">What’s the difference between encoding and charset?</a><br>
+<a href="https://zh.wikipedia.org/wiki/Unicode" target="_blank" rel="external">Unicode</a><br>
+<a href="https://zh.wikipedia.org/wiki/%E9%80%9A%E7%94%A8%E5%AD%97%E7%AC%A6%E9%9B%86#Unicode.E5.92.8CISO_10646.E7.9A.84.E5.85.B3.E7.B3.BB" target="_blank" rel="external">通用字符集</a><br>
+<a href="https://zh.wikipedia.org/wiki/UTF-8" target="_blank" rel="external">UTF-8</a><br>
+<a href="http://unicode.org/" target="_blank" rel="external">unicode.org</a><br>
+<a href="http://baike.baidu.com/view/40801.htm" target="_blank" rel="external">unicode百科</a></p>
 ]]></content>
     
     <summary type="html">
@@ -404,13 +698,18 @@
     <updated>2017-08-28T14:23:50.000Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
+<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 ]]></content>
     
