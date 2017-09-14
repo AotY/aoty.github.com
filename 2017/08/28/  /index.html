@@ -29,7 +29,7 @@
   
 
   
-    <link rel="icon" href="https://ws3.sinaimg.cn/large/006tNc79ly1fiztujvadej308e08emyz.jpg">
+    <link rel="icon" href="https://github.com/AotY/aoty.github.com/blob/master/images/aoty.png">
   
 
   <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
@@ -371,7 +371,24 @@
       // load success
     });
   }
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 </html>

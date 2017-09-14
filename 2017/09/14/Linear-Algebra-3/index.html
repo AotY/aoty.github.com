@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Linear Algebra in Python 3 — 矩阵乘法与逆矩阵 | AotY&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="线性代数 矩阵 矩阵乘法," />
+  
+
+  <meta name="description" content="Linear Algebra in Python 3 \matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。  下面是这节的四个知识点：  Elimination (消元) Success Failure Back-Substitution Elimination matrices Matrix multipli">
+<meta name="keywords" content="线性代数 矩阵 矩阵乘法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Algebra in Python 3 — 矩阵乘法与逆矩阵">
+<meta property="og:url" content="http://aoty.github.io/2017/09/14/Linear-Algebra-3/index.html">
+<meta property="og:site_name" content="AotY&#39;s Blog">
+<meta property="og:description" content="Linear Algebra in Python 3 \matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。  下面是这节的四个知识点：  Elimination (消元) Success Failure Back-Substitution Elimination matrices Matrix multipli">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fjj1emg5qzj30v404ymxy.jpg">
+<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1fjix5sjo32j30ny04k74i.jpg">
+<meta property="og:updated_time" content="2017-09-14T05:41:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linear Algebra in Python 3 — 矩阵乘法与逆矩阵">
+<meta name="twitter:description" content="Linear Algebra in Python 3 \matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。  下面是这节的四个知识点：  Elimination (消元) Success Failure Back-Substitution Elimination matrices Matrix multipli">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fjj1emg5qzj30v404ymxy.jpg">
+
+  
+
+  
+    <link rel="icon" href="https://github.com/AotY/aoty.github.com/blob/master/images/aoty.png">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+
+
+  
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linear-algebra-in-python-3"><span class="toc-text"> Linear Algebra in Python 3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-matrix-multiplication"><span class="toc-text"> 1. Matrix Multiplication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-way-1-方法一"><span class="toc-text"> 1.1 Way 1 （方法一）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-way-2-方法二"><span class="toc-text"> 1.2 Way 2 (方法二)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-way-3-方法三"><span class="toc-text"> 1.3 Way 3 （方法三）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-way-4-方法四"><span class="toc-text"> 1.4 Way 4 （方法四）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-way-5-方法五"><span class="toc-text"> 1.5 Way 5 （方法五）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-gauss-jordan-elimination"><span class="toc-text"> 2. Gauss-Jordan Elimination</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Linear-Algebra-3" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Linear Algebra in Python 3 — 矩阵乘法与逆矩阵</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.09.14</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>AotY</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://aoty.github.io/2017/09/14/Linear-Algebra-3/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="linear-algebra-in-python-3"><a class="markdownIt-Anchor" href="#linear-algebra-in-python-3"></a> Linear Algebra in Python 3</h2>
+<p>\matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。</p>
+<blockquote>
+<p>下面是这节的四个知识点：</p>
+<ul>
+<li>Elimination (消元)</li>
+<li>Success</li>
+<li>Failure</li>
+<li>Back-Substitution</li>
+<li>Elimination matrices</li>
+<li>Matrix multiplication</li>
+</ul>
+</blockquote>
+<h2 id="1-matrix-multiplication"><a class="markdownIt-Anchor" href="#1-matrix-multiplication"></a> 1. Matrix Multiplication</h2>
+<p>计算矩阵乘法有很多种方法，下面将介绍5中常用的方法。</p>
+<h3 id="11-way-1-方法一"><a class="markdownIt-Anchor" href="#11-way-1-方法一"></a> 1.1 Way 1 （方法一）</h3>
+<p>对于式子\matrix{A}\matrix{B}=\matrix{C} (其中A为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">m \times n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.58333em;"></span><span class="strut bottom" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathit">m</span><span class="mbin">×</span><span class="mord mathit">n</span></span></span></span>矩阵，B为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n \times p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.58333em;"></span><span class="strut bottom" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span><span class="mbin">×</span><span class="mord mathit">p</span></span></span></span>矩阵，C为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mo>×</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">m \times p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.58333em;"></span><span class="strut bottom" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">m</span><span class="mbin">×</span><span class="mord mathit">p</span></span></span></span>矩阵)，对于\matrix{C}中的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>C</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">C_{ij}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit" style="margin-right:0.07153em;">C</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.07153em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.05724em;">j</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>(i表示行，j表示列)，可以由下面的式子得到：</p>
+\begin{align*}
+C_{ij} {=} (\vec{a}_i) * (\bf{b}_j)
+\end{align*}
+
+<p>其中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mrow><mi>a</mi></mrow><mo>⃗</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\vec{a}_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.71444em;"></span><span class="strut bottom" style="height:0.86444em;vertical-align:-0.15em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit">a</span></span></span><span style="top:0em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathit">i</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>表示\matrix{A}中的第i行，\bf{b}_{j}表示的是\matrix{B}中的第j列，它们之间进行点乘（dot product），这也要求矩阵\matrix{A}的行数矩阵\matrix{B}的列数相等，与如果将上面的式子展开会有</p>
+\begin{align*}
+C_{ij} {=} a_{i1}b_{1j} + a_{i2}b_{2j} + a_{i3}b_{3j} + \dots
+	{=} \sum_{k=1}^{n} a_{ik}b_{kj}
+	
+
+\end{align*}
+
+<h3 id="12-way-2-方法二"><a class="markdownIt-Anchor" href="#12-way-2-方法二"></a> 1.2 Way 2 (方法二)</h3>
+<p>思路： 用矩阵乘以列向量</p>
+<p>对于下面这个式子$ \matrix{A}\matrix{B}=\matrix{C}$ （其中A为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>矩阵，B 为$ 2 \times 2$矩阵，C为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>矩阵）</p>
+\begin{align*}
+
+\begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  a & c \\
+  b & d
+\end{bmatrix}
+{=}
+\matrix{C}
+
+\end{align*}
+
+<p>我们可以把右边的矩阵\matrix{B}看成一系列单独的列向量，然后分别与矩阵\matrix{A}相乘，然后再组合即可得到矩阵\matrix{C}。</p>
+\begin{align*}
+
+\begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  a  \\
+  b
+\end{bmatrix}
+{=}
+ \bf{c}_{1}
+ 
+ \\
+ 
+ \begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  c  \\
+  d
+\end{bmatrix}
+{=}
+ \bf{c}_{2}
+ 
+ 
+ \\
+ \begin{bmatrix}
+\bf{c}_{1} & \bf{c}_{2} 
+\end{bmatrix}
+
+{=} \matrix{C}
+\end{align*}
+
+<p>C中的每列是A矩阵中每一列的线性组合。A矩阵乘以向量，等价于A中列的线性组合，而B中的数值告诉我们是怎么样的线性组合。</p>
+<h3 id="13-way-3-方法三"><a class="markdownIt-Anchor" href="#13-way-3-方法三"></a> 1.3 Way 3 （方法三）</h3>
+<p>思路：用行向量乘以矩阵</p>
+<p>对于下面这个式子$ \matrix{A}\matrix{B}=\matrix{C}$ （其中A为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>矩阵，B 为$ 2 \times 2$矩阵，C为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>矩阵）</p>
+\begin{align*}
+
+\begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  a & c \\
+  b & d
+\end{bmatrix}
+{=}
+\matrix{C}
+
+\end{align*}
+
+<p>我们可以把左边的矩阵\matrix{A}看成一系列单独的行向量，然后分别与矩阵\matrix{B}相乘，然后再组合即可得到矩阵\matrix{C}。</p>
+\begin{align*}
+
+\begin{bmatrix}
+  1 & 3 \\
+\end{bmatrix}
+\begin{bmatrix}
+  a & c \\
+  b & d
+\end{bmatrix}
+{=}
+ \vec{c}_{1}
+ 
+ \\
+ 
+ \begin{bmatrix}
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  a & c \\
+  b & d
+\end{bmatrix}
+{=}
+ \vec{c}_{2}
+ 
+ 
+ \\
+ \begin{bmatrix}
+ \vec{c}_{1} \\
+ \vec{c}_{2}
+\end{bmatrix}
+
+{=} \matrix{C}
+\end{align*}
+
+<p>C中的每行是B矩阵中每一行的线性组合。向量乘以矩阵，等价于B中行的线性组合，而A中的数值告诉我们是怎么样的线性组合。</p>
+<h3 id="14-way-4-方法四"><a class="markdownIt-Anchor" href="#14-way-4-方法四"></a> 1.4 Way 4 （方法四）</h3>
+<p>思路：用列向量乘以行向量</p>
+<p>对于下面这个式子$ \matrix{A}\matrix{B}=\matrix{C}$ （其中A为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>矩阵，B 为$ 2 \times 2$矩阵，C为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mbin">×</span><span class="mord mathrm">2</span></span></span></span>矩阵）</p>
+
+\begin{align*}
+
+\begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  a & c \\
+  b & d
+\end{bmatrix}
+{=}
+\matrix{C}
+
+\end{align*}
+
+
+<p>我们可以把左边的矩阵\matrix{A}看成一系列单独的列向量，把矩阵\matrix{B}看成是单独的行向量，然后再组合即可得到矩阵\matrix{C}。</p>
+\begin{align*}
+
+\begin{bmatrix}
+  1 \\
+  2
+\end{bmatrix}
+\begin{bmatrix}
+  a & c \\
+\end{bmatrix}
++ 
+
+ \begin{bmatrix}
+3 \\
+ 7
+\end{bmatrix}
+\begin{bmatrix}
+b & d
+\end{bmatrix}
+{=} \matrix{C}
+\end{align*}
+
+<h3 id="15-way-5-方法五"><a class="markdownIt-Anchor" href="#15-way-5-方法五"></a> 1.5 Way 5 （方法五）</h3>
+<p>思路： 分块乘法</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fjj1emg5qzj30v404ymxy.jpg" alt="屏幕快照 2017-09-14 13.41.03"></p>
+<h2 id="2-gauss-jordan-elimination"><a class="markdownIt-Anchor" href="#2-gauss-jordan-elimination"></a> 2. Gauss-Jordan Elimination</h2>
+<blockquote>
+<p>Solves two equations at once.<br>
+对于下面式子</p>
+</blockquote>
+\begin{align*}
+
+\begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  a & c \\
+  b & d
+\end{bmatrix}
+ {=} 
+\begin{bmatrix}
+  1 & 0 \\
+  0 & 1
+\end{bmatrix}
+
+\end{align*}
+
+<p>如果我们想要求出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">a, b, c, d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">b</span><span class="mpunct">,</span><span class="mord mathit">c</span><span class="mpunct">,</span><span class="mord mathit">d</span></span></span></span>的值，需要列出下面的方程</p>
+\begin{align*}
+
+\begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  a \\
+  b
+\end{bmatrix}
+ {=} 
+\begin{bmatrix}
+  1  \\
+  0 
+\end{bmatrix}
+
+\\
+\\
+
+\begin{bmatrix}
+  1 & 3 \\
+  2 & 7
+\end{bmatrix}
+\begin{bmatrix}
+  c \\
+  d
+\end{bmatrix}
+ {=} 
+\begin{bmatrix}
+  0  \\
+  1 
+\end{bmatrix}
+\end{align*}
+
+<p>我们可以列出两对方程组，然后可以分别解出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">a, b, c, d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">a</span><span class="mpunct">,</span><span class="mord mathit">b</span><span class="mpunct">,</span><span class="mord mathit">c</span><span class="mpunct">,</span><span class="mord mathit">d</span></span></span></span>的值。但是Jordan对Gauss说，我们可以一次解出两个方程。这里又用到增广矩阵，我们的目标是将左边化为单位矩阵，这样右边就得到了\matrix{A}^{-1} 。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fjix5sjo32j30ny04k74i.jpg" alt="屏幕快照 2017-09-14 11.14.09"></p>
+<p>标红的地方表示是当前主元（pivot），这样我们就将</p>
+\begin{align*}
+[\ 
+  \matrix{A}  \matrix{I}
+]\
+\rightarrow
+[\ 
+  \matrix{I}  \matrix{A}^{-1}
+]\
+
+\end{align*}
+
+<p>也就得到了我们想要的\matrix{A}^{-1} 。</p>
+<p>为什么这种方法会用效呢？ 我们上面只是对增广矩阵进行了加减法变化，为什么会得到矩阵\matrix{A}的逆矩阵呢？上节我们说过，可以通过矩阵相乘来达到矩阵变化的目的，如下式子所表示的。我们在增广矩阵左乘矩阵\matrix{E}使得\matrix{A}  \matrix{I} 变为 \matrix{I}  \matrix{E} 。</p>
+\begin{align*}
+\matrix{E}
+[\ 
+  \matrix{A}  \matrix{I}
+]\
+ {=} 
+[\ 
+  \matrix{I}  \matrix{E}
+]\
+
+\end{align*}
+
+<p>这里用到了分块矩阵乘法的思想，因为\matrix{E}\matrix{A}{=}\matrix{I}，这就说明\matrix{E}{=}\matrix{A}^{-1} 。即：</p>
+\begin{align*}
+\matrix{E}
+[\ 
+  \matrix{A}  \matrix{I}
+]\
+ {=} 
+[\ 
+  \matrix{I}  \matrix{A}^{-1}
+]\
+
+\end{align*}
+
+<p>因为相对于去寻找矩阵\matrix{E}，更方便的方法是通过加减法变化来达到同样的效果。这就是Gauss-Jordan Elimination。</p>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.png" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/09/13/Linear-Algebra-2/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'AotY';
+    
+    var disqus_url = 'http://aoty.github.io/2017/09/14/Linear-Algebra-3/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//AotY.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>

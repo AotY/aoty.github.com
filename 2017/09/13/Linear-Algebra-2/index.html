@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Linear Algebra in Python 2 — 矩阵消元 | AotY&#39;s Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="线性代数 矩阵 消元," />
+  
+
+  <meta name="description" content="Linear Algebra in Python 2 \matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。  下面是这节的四个知识点：  Elimination (消元) Success Failure Back-Substitution Elimination matrices Matrix multipli">
+<meta name="keywords" content="线性代数 矩阵 消元">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Algebra in Python 2 — 矩阵消元">
+<meta property="og:url" content="http://aoty.github.io/2017/09/13/Linear-Algebra-2/index.html">
+<meta property="og:site_name" content="AotY&#39;s Blog">
+<meta property="og:description" content="Linear Algebra in Python 2 \matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。  下面是这节的四个知识点：  Elimination (消元) Success Failure Back-Substitution Elimination matrices Matrix multipli">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fji7collgmj30mw068aae.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fji8olqny1j30mw04wq3g.jpg">
+<meta property="og:updated_time" content="2017-09-14T03:08:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linear Algebra in Python 2 — 矩阵消元">
+<meta name="twitter:description" content="Linear Algebra in Python 2 \matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。  下面是这节的四个知识点：  Elimination (消元) Success Failure Back-Substitution Elimination matrices Matrix multipli">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNc79ly1fji7collgmj30mw068aae.jpg">
+
+  
+
+  
+    <link rel="icon" href="https://github.com/AotY/aoty.github.com/blob/master/images/aoty.png">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+
+<body>
+
+
+  
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linear-algebra-in-python-2"><span class="toc-text"> Linear Algebra in Python 2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-elimination"><span class="toc-text"> 1. Elimination</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-back-substitution"><span class="toc-text"> 2. Back-Substitution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-elimination-matrices"><span class="toc-text"> 3. Elimination matrices</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-inverses"><span class="toc-text"> 4. Inverses</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-permutation-matrix"><span class="toc-text"> 5. Permutation Matrix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#elimination-in-python"><span class="toc-text"> Elimination in Python</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Linear-Algebra-2" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Linear Algebra in Python 2 — 矩阵消元</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.09.13</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>AotY</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://aoty.github.io/2017/09/13/Linear-Algebra-2/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="linear-algebra-in-python-2"><a class="markdownIt-Anchor" href="#linear-algebra-in-python-2"></a> Linear Algebra in Python 2</h2>
+<p>\matrix{A}\bf{x}{=}\bf{b}可解的充要条件是向量\bf{b}可以写为矩阵\matrix{A} 列向量的一个线性组合。</p>
+<blockquote>
+<p>下面是这节的四个知识点：</p>
+<ul>
+<li>Elimination (消元)</li>
+<li>Success</li>
+<li>Failure</li>
+<li>Back-Substitution</li>
+<li>Elimination matrices</li>
+<li>Matrix multiplication</li>
+</ul>
+</blockquote>
+<h2 id="1-elimination"><a class="markdownIt-Anchor" href="#1-elimination"></a> 1. Elimination</h2>
+<p>对于方程组（三个方程三个未知数）：</p>
+\begin{align*}
+
+x + 2y + z &= 2  \\
+
+3x + 8y + z  = 12\\
+
+4y + z = 2
+
+\end{align*}
+
+<p>若要写为\matrix{A}\bf{x}{=}\bf{b} 的形式，则有：</p>
+\begin{align*}
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    3 & 8 & 1 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+    x      \\
+   y \\
+   z
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    2      \\
+    12 \\
+    2
+\end{bmatrix}
+\end{align*}
+
+<p>下面我们对\matrix{A}进行elimination（消元）操作，先不管\bf{b} , 最终目标是将系数矩阵\matrix{A}化为三角形形式（不一定所有矩阵都可以化为三角形形式，也可能是阶梯形或者是梯形）。</p>
+\begin{align*}
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    3 & 8 & 1 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+
+\rightarrow
+
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    0 & 2 & -2 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+
+\rightarrow
+
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    0 & 2 & -2 \\
+    0 & 0 & 5 \\
+\end{bmatrix}
+
+
+\end{align*}
+
+<p>其中，第一步是用第二行减去 3倍第一行，第二步是用第三行减去2倍第二行。下面的式子标出了每一步主元（pivot），这里要记住，主元不能为0。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fji7collgmj30mw068aae.jpg" alt="屏幕快照 2017-09-13 20.20.58"></p>
+<p>如果消元到这一步说明消元成功（Elimination Success）。这也可以表示为\matrix{A} \rightarrow \matrix{U}，如果我们将上面的变化步骤作用于\bf{b}上，即是\bf{b} \rightarrow \bf{c} ：</p>
+\begin{align*}
+\begin{bmatrix}
+    2 \\
+    12 \\
+    2
+\end{bmatrix}
+
+\rightarrow
+
+\begin{bmatrix}
+    2 \\
+    6 \\
+    2
+\end{bmatrix}
+
+\rightarrow
+
+\begin{bmatrix}
+    2 \\
+    6 \\
+    -10
+\end{bmatrix}
+
+
+\end{align*}
+
+<p>最后原式子变为\matrix{U}\bf{x}{=}\bf{c} ，进行<strong>回代操作</strong>（Back-Substitution）。</p>
+\begin{align*}
+
+x + 2y + z &= 2  \\
+
+2y - 2z  = 6\\
+
+5z = -10
+
+\end{align*}
+
+<p>可以容易解出方程组</p>
+\begin{align*}
+
+x = 2  \\
+
+y = 1\\
+
+z = -2
+
+\end{align*}
+
+<p>如果上面的式子<strong>消元失败</strong>的话就不能得到三个主元，比如下面这个例子，我们就是这个<strong>矩阵不可逆。</strong> （这里要提一句的时，如果出现主元为0的情况，第一种，暂时失效可以通过行交换来解决；第二种，当底下行中没有非0元素时，称消元彻底失败。）</p>
+\begin{align*}
+\matrix{U}=
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    0 & 2 & -2 \\
+    0 & 0 & 0 \\
+\end{bmatrix}
+\end{align*}
+
+<h2 id="2-back-substitution"><a class="markdownIt-Anchor" href="#2-back-substitution"></a> 2. Back-Substitution</h2>
+<p>上面我们已经使用了Back-Substitution，这里我们使用Augment Matrix（增广矩阵）对于\matrix{A}</p>
+<p>与\bf{b}同时进行消元操作：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fji8olqny1j30mw04wq3g.jpg" alt="屏幕快照 2017-09-13 21.07.20"></p>
+<p>再进行回代操作也会得到和上面一样的结果。</p>
+<h2 id="3-elimination-matrices"><a class="markdownIt-Anchor" href="#3-elimination-matrices"></a> 3. Elimination matrices</h2>
+<p>注意到，上面的的消元操作没有使用到矩阵，下面我们使用矩阵来描述消元步骤；</p>
+<ul>
+<li>第一步，我们需要一个矩阵使下面的式子成立</li>
+</ul>
+\begin{align*}
+\begin{bmatrix}
+\\
+\\
+\\
+\end{bmatrix}
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    3 & 8 & 1 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+
+{=}
+
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    0 & 2 & -2 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+\end{align*}
+
+<p>经过运算，我们可以得出这个矩阵，即</p>
+\begin{align*}
+\begin{bmatrix}
+1 & 0 & 0\\
+-3 & 1 & 0\\
+0 & 0 & 1\\
+\end{bmatrix}
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    3 & 8 & 1 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+
+{=}
+
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    0 & 2 & -2 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+\end{align*}
+
+<p>这个矩阵我们称为初等矩阵(\matrix{E}），因为它在(2, 1)位置进行了变换，我们把这个矩阵记为: \matrix{E}_{2 1}。</p>
+<ul>
+<li>第二步，寻找一个矩阵使下面的式子成立，我们把这个矩阵记为: \matrix{E}_{3 2}。\begin{align*}
+\begin{bmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & -2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    3 & 8 & 1 \\
+    0 & 4 & 1 \\
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+    1  & 2 & 1      \\
+    0 & 2 & -2 \\
+    0 & 0 & 5 \\
+\end{bmatrix}
+\end{align*}
+
+​</li>
+</ul>
+<p>所以，</p>
+\begin{align*}
+\matrix{E}_{3 2}(\matrix{E}_{2 1} \matrix{A} ) {=} \matrix{U}  \\ 
+(\matrix{E}_{3 2}\matrix{E}_{2 1}) \matrix{A}{=} \matrix{U} 
+
+
+\end{align*}
+
+<p>​</p>
+<h2 id="4-inverses"><a class="markdownIt-Anchor" href="#4-inverses"></a> 4. Inverses</h2>
+<p>上面我们将\matrix{A} \rightarrow \matrix{U}​，如果我们需要进行\matrix{U} \rightarrow \matrix{A}​操作，则称为逆操作。比如上面的矩阵我们对其进行左乘\matrix{E}_{3 2}\matrix{E}_{2 1}​ 操作，现在我们需要取消（undo）这些操作该怎么办？我们再左乘以\matrix{E}_{2  1}^{-1}\matrix{E}_{3 2}^{-1}​ (分别是\matrix{E}_{2 1}\matrix{E}_{3 2}​的逆矩阵)</p>
+\begin{align*}
+
+\begin{bmatrix}
+1 & 0 & 0\\
+-3 & 1 & 0\\
+0 & 0 & 1\\
+\end{bmatrix}
+
+\begin{bmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 2 & 1
+\end{bmatrix}
+
+\begin{bmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & -2 & 1
+\end{bmatrix}
+
+\begin{bmatrix}
+1 & 0 & 0\\
+3 & 1 & 0\\
+0 & 0 & 1\\
+\end{bmatrix}
+
+\matrix{A}
+
+{=} \matrix{A}
+\end{align*}
+\\
+(\matrix{E}_{2 1}^{-1}\matrix{E}_{3 2}^{-1})(\matrix{E}_{3 2}\matrix{E}_{2 1}) \matrix{A}{=} \matrix{A}
+
+<h2 id="5-permutation-matrix"><a class="markdownIt-Anchor" href="#5-permutation-matrix"></a> 5. Permutation Matrix</h2>
+<ul>
+<li>
+<p>使用矩阵交换另一个矩阵的行</p>
+\begin{align*}
+\begin{bmatrix}
+0 & 1\\
+1 & 0\\
+\end{bmatrix}
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}
+
+{=}
+
+\begin{bmatrix}
+c & d \\
+a & b
+\end{bmatrix}
+\end{align*}
+
+</li>
+<li>
+<p>使用矩阵交换另一个矩阵的列</p>
+\begin{align*}
+ 
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1\\
+1 & 0\\
+\end{bmatrix}
+{=}
+\begin{bmatrix}
+b & a \\
+d & c
+\end{bmatrix}
+\end{align*}
+
+</li>
+</ul>
+<p>这里有一个结论，<strong>行变换是左乘，列变换是右乘。</strong></p>
+<h2 id="elimination-in-python"><a class="markdownIt-Anchor" href="#elimination-in-python"></a> Elimination in Python</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">from numpy import array</div><div class="line">from scipy.linalg import lu</div><div class="line"></div><div class="line">a = array([[1., 2., 1.],[3., 8., 1.],[0., 4., 1.]])</div><div class="line"></div><div class="line">pl, u = lu(a, permute_l=True)</div><div class="line"></div><div class="line">print(u)</div><div class="line">print(pl)</div><div class="line"></div><div class="line">&apos;&apos;&apos; output</div><div class="line">[[ 3.          8.          1.        ]</div><div class="line"> [ 0.          4.          1.        ]</div><div class="line"> [ 0.          0.          0.83333333]]</div><div class="line">[[ 0.33333333 -0.16666667  1.        ]</div><div class="line"> [ 1.          0.          0.        ]</div><div class="line"> [ 0.          1.          0.        ]]</div><div class="line"> </div><div class="line"> &apos;&apos;&apos;</div></pre></td></tr></table></figure>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持forsigner</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.png" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.png" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/09/12/Linear-Algebra-1/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2017/09/14/Linear-Algebra-3/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'AotY';
+    
+    var disqus_url = 'http://aoty.github.io/2017/09/13/Linear-Algebra-2/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//AotY.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

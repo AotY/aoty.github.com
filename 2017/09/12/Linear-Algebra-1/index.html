@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tKfTcly1fjhq7j3xylj30ae070dfx.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006tKfTcly1fjhrny1l1kj309w06mmxy.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tKfTcly1fjhsmu5e8tj309w06m74s.jpg">
-<meta property="og:updated_time" content="2017-09-13T05:34:40.000Z">
+<meta property="og:updated_time" content="2017-09-14T03:08:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Algebra in Python 1 — 方程组的几何解释">
 <meta name="twitter:description" content="Linear Algebra in Python 1  下面是四个知识点，其中Column Picture尤其重要。  n linear equations, n unknowns. Row picture Column picture Matrix form    1. Row Picture（行向量视角） 对于下面方程组，两个方程两个未知数。 \begin{align*}  2x - y &amp;">
@@ -37,7 +37,7 @@
   
 
   
-    <link rel="icon" href="https://ws3.sinaimg.cn/large/006tNc79ly1fiztujvadej308e08emyz.jpg">
+    <link rel="icon" href="https://github.com/AotY/aoty.github.com/blob/master/images/aoty.png">
   
 
   <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
@@ -242,7 +242,7 @@ y
 <p>Linear Algebra is the linear combination of Columns.</p>
 <p>线性代数就是列向量的各种（线性）组合。</p>
 </blockquote>
-<p>接下来我们在坐标系中画出两个向量(分别记为$\vec{v1} 和\vec{v2} $)。</p>
+<p>接下来我们在坐标系中画出两个向量(分别记为$\vec{v1} , \vec{v2} $)。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">vecs = np.array([[0, 0, -1, 2], [0, 0, 2, -1]])</div><div class="line">X, Y, U, V = zip(*vecs)</div><div class="line"></div><div class="line">plt.figure()</div><div class="line">ax = plt.gca()</div><div class="line">ax.quiver(X, Y, U, V, angles=&apos;xy&apos;, scale_units=&apos;xy&apos;, scale=1)</div><div class="line"></div><div class="line">ax.text(-1, 2, &quot;v1&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">ax.text(2, -1, &quot;v2&quot;, style=&apos;italic&apos;,</div><div class="line">            bbox=&#123;&apos;facecolor&apos;:&apos;red&apos;, &apos;alpha&apos;:0.5, &apos;pad&apos;:0.5&#125;)</div><div class="line">            </div><div class="line">ax.set_xticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_yticks(np.arange(vecs.min(), vecs.max() + 1, 1.0))</div><div class="line">ax.set_xlim([vecs.min(), vecs.max() + 1])</div><div class="line">ax.set_ylim([vecs.min(), vecs.max() + 1])</div><div class="line"></div><div class="line">plt.grid(b=True, which=&apos;major&apos;) #&lt;-- plot grid lines</div><div class="line">plt.draw()</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fjhq27l62bj30ae070mx7.jpg" alt="44037E25-B108-40C0-A684-141A1F054314"></p>
 <p>如果我们对这两个向量进行向量间的操作（向量加法，因为我们上面已经知道了<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">x=1, y= 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">x</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mrel">=</span><span class="mord mathrm">2</span></span></span></span>是方程的解），会得到下面的结果：</p>
@@ -279,7 +279,7 @@ x \vec{v1} + y\vec{v2}=
 \end{bmatrix}
 \end{align*}
 
-<p>成立，我们可以想象的是，如果<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:0.92788em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>可以<strong>表示平面内的所有向量</strong>（相互独立），那么它们一定可以表示<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mrow><mn>0</mn></mrow></mtd></mtr><mtr><mtd><mrow><mn>3</mn></mrow></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}0      \\ 3 \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="base textstyle uncramped"><span class="minner textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist"><span style="top:-0.6099999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">0</span></span></span><span style="top:0.5900000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span>  这个向量。</p>
+<p>成立，我们可以想象的是，如果<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>v</mi><mn>1</mn></mrow><mo>⃗</mo></mover><mo separator="true">,</mo><mover accent="true"><mrow><mi>v</mi><mn>2</mn></mrow><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{v1}, \vec{v2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.92788em;"></span><span class="strut bottom" style="height:1.12232em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">1</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mpunct">,</span><span class="mord accent"><span class="vlist"><span style="top:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle cramped"><span class="mord mathit" style="margin-right:0.03588em;">v</span><span class="mord mathrm">2</span></span></span><span style="top:-0.21344000000000002em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="accent-body accent-vec"><span>⃗</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>可以<strong>表示平面内的所有向量</strong>（相互独立），那么它们一定可以表示<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mo fence="true">[</mo><mtable><mtr><mtd><mrow><mn>0</mn></mrow></mtd></mtr><mtr><mtd><mrow><mn>3</mn></mrow></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\begin{bmatrix}0      \\ 3 \end{bmatrix}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:1.45em;"></span><span class="strut bottom" style="height:2.40003em;vertical-align:-0.95003em;"></span><span class="base textstyle uncramped"><span class="minner textstyle uncramped"><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist"><span style="top:-0.6099999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">0</span></span></span><span style="top:0.5900000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord textstyle uncramped"><span class="mord mathrm">3</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span class="style-wrap reset-textstyle textstyle uncramped" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span>  这个向量。</p>
 <h2 id="3-matrix-form矩阵表示"><a class="markdownIt-Anchor" href="#3-matrix-form矩阵表示"></a> 3. Matrix form（矩阵表示）</h2>
 <p>上面的方程组：</p>
 \begin{align*} 
@@ -435,7 +435,7 @@ z
     <a class="show pull-left" href="/2017/08/29/charset-encoding-5/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="hide pull-right" href="/">
+    <a class="show pull-right" href="/2017/09/13/Linear-Algebra-2/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
@@ -572,7 +572,24 @@ z
       // load success
     });
   }
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 </html>
